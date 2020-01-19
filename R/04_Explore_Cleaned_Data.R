@@ -29,9 +29,25 @@ pal = c("#c4a113","#c1593c","#643d91","#820616","#477887","#688e52",
 palplot <- colorblindr::palette_plot(pal)
 
 # Load data ####
-ps <- readRDS("./output/cleaned_ps_object.RDS")
-psm_island_ra <- readRDS("./output/ps_island_ra.RDS")
-psm_color_ra <- readRDS("./output/ps_color_ra.RDS")
+ps <- readRDS("./output/cleaned_ps_object_w_tree.RDS")
+
+# Merge by various factors ####
+
+# Island ##
+ps_island = merge_samples(ps,"Island")
+# Repair metadata
+ps_island@sam_data$Island <- row.names(ps_island@sam_data)
+# Rel-abund
+ps_island_ra <- transform_sample_counts(ps_island, function(x) x/sum(x))
+saveRDS(ps_island_ra,"output/ps_island_ra.RDS")
+
+# Colony Color ##
+ps_color <- merge_samples(ps,"ColonyColor")  
+# Repair metadata
+ps_color@sam_data$ColonyColor <- row.names(ps_color@sam_data)
+# Rel-abund
+ps_color_ra <- transform_sample_counts(ps_color, function(x) x/sum(x))
+saveRDS(ps_color_ra,"./output/ps_color_ra.RDS")
 
 
 # Transform full phyloseq object to relative abundance ####
@@ -59,8 +75,12 @@ ggmap(chagosmap) +
 ggplot(meta, aes(x=Lon,y=Lat)) + geom_point()
 
 
-# Initial Plots
-plot_bar2(psm_color_ra,fill = "Phylum") + scale_fill_manual(values=pal)
+# Bar Plots, merged by various sample data ####
+plot_bar2(ps_color_ra,fill = "Phylum") + scale_fill_manual(values=pal)
+ggsave("./output/figs/Barplot_Phylum_by_ColonyColor.png",dpi=300)
+plot_bar2(ps_island_ra,fill = "Phylum") + scale_fill_manual(values=pal)
+ggsave("./output/figs/Barplot_Phylum_by_Island.png",dpi=300)
+
 
 # Plot richness based on ColonyColor ####
 plot_richness(ps,x="ColonyColor",measures=c("Shannon","Observed"))
@@ -70,7 +90,7 @@ shannon = diversity(otu_table(ps_ra),index = "shannon")
 plot(ps_ra@sam_data$AvgSiteTemp,shannon)
 
 
-# Model basic alpha diversity based on all factors ####
+# Model basic alpha diversity based on many factors ####
 mod.shannon = aov(data=meta, shannon ~ (Island + ColonyColor + AvgSiteTemp)* SpeciesConfirmed)
 mod.richness = aov(data=meta, richness ~ (Island + ColonyColor + AvgSiteTemp)* SpeciesConfirmed)
 summary(mod.shannon)
@@ -93,7 +113,8 @@ summary(step2)
 plot(meta$ColonyColor,meta$AvgSiteTemp)
 ggplot(meta, aes(x=ColonyColor,y=AvgSiteTemp,fill=ColonyColor)) + 
   geom_boxplot(alpha=.5) + geom_point(alpha=.5) +
-  labs(y="Mean Site Temperature",x="Colony Color",fill="Colony Color")
+  labs(y="Mean Site Temperature",x="Colony Color",fill="Colony Color") +
+  scale_fill_manual(values = pal[c(11,4,6,1)]) + theme_bw()
 ggsave("./output/figs/Temp_vs_ColonyColor.png",dpi=300)
 
 
@@ -112,8 +133,12 @@ plot_ordination(ps,dca,color = "Island")
 ggsave("./output/figs/DCA_Ordination_by_Island.png",dpi=300)
 
 
-
-
+# Heatmaps ####
+names(sample_data(ps_ra))
+plot_heatmap(ps_ra, sample.label="ColonyColor",
+             low="#66CCFF", high="#000033", na.value="white",
+             method = "Unifrac")
+?plot_heatmap
 
 
 

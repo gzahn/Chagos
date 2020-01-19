@@ -1,6 +1,11 @@
+# Analyses of Chagos Islands coral-associated bacteria 16S Amplicons
+# Data cleaning and preparation - building a phylogeny
+# Author: Geoffrey Zahn
+
 # Packages and functions ####
 library(tidyverse)
 library(phyloseq)
+library(vegan)
 theme_set(theme_bw())
 
 # Load phyloseq object from 01_Process_Raw_Data.R ####
@@ -102,33 +107,19 @@ ps@sam_data
 skimr::skim(ps@sam_data)
 
 unique(ps@tax_table[,2])
+
 # Clean up non-bacterial taxa ####
 bact <- subset_taxa(ps, Kingdom == "Bacteria")
 bact <- subset_taxa(bact, Phylum != "Cyanobacteria")
 bact <- subset_taxa(bact, Family != "Mitochondria")
 ps <- bact
 
-# Save cleaned phyloseq object
+ntaxa(ps)
+
+# Save cleaned phyloseq object ####
 saveRDS(ps, "./output/cleaned_ps_object.RDS")
 
 
-# Merge by various factors ####
-
-# Island
-ps_island = merge_samples(ps,"Island")
-  # Repair metadata
-  ps_island@sam_data$Island <- row.names(ps_island@sam_data)
-  # Rel-abund
-  ps_island_ra <- transform_sample_counts(ps_island, function(x) x/sum(x))
-saveRDS(ps_island_ra,"output/ps_island_ra.RDS")
-ps@sam_data$ColonyColor
-# Colony Color
-ps_color <- merge_samples(ps,"ColonyColor")  
-  # Repair metadata
-  ps_color@sam_data$ColonyColor <- row.names(ps_color@sam_data)
-  # Rel-abund
-  ps_color_ra <- transform_sample_counts(ps_color, function(x) x/sum(x))
-saveRDS(ps_color_ra,"./output/ps_color_ra.RDS")
 
 
 

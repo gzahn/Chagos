@@ -1,0 +1,6 @@
+Rscript ./R/01_Process_Raw_Data.R
+Rscript ./R/02_Clean_and_Prepare_Processed_Data.R
+Rscript ./R/03_Build_Phylogeny.R
+Rscript ./R/04_Explore_Cleaned_Data.R
+Rscript ./R/05_Differencial_Taxon_Abundance.R
+
