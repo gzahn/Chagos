@@ -1,0 +1,145 @@
+                                                                                    OTU8 
+"Bacteria_Proteobacteria_Gammaproteobacteria_Oceanospirillales_Halomonadaceae_Halomonas" 
+
+Call:
+bbdml(formula = OTU8 ~ ColonyColor, phi.formula = ~ColonyColor, 
+    data = ps)
+
+
+Coefficients associated with abundance:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -3.7358     0.2082 -17.947   <2e-16 ***
+ColonyColorPale       -0.6787     1.1921  -0.569    0.570    
+ColonyColorVery pale   0.4186     0.3295   1.270    0.207    
+ColonyColorBleached    0.2483     0.6364   0.390    0.697    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -2.5124     0.2583  -9.727 2.74e-16 ***
+ColonyColorPale        0.6230     1.3302   0.468   0.6405    
+ColonyColorVery pale  -1.5207     0.5864  -2.593   0.0109 *  
+ColonyColorBleached    1.2096     0.7086   1.707   0.0908 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -556.82
+                                                                 OTU14 
+"Bacteria_Proteobacteria_Gammaproteobacteria_Vibrionales_Vibrionaceae" 
+
+Call:
+bbdml(formula = OTU14 ~ ColonyColor, phi.formula = ~ColonyColor, 
+    data = ps)
+
+
+Coefficients associated with abundance:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -4.4673     0.3378 -13.225  < 2e-16 ***
+ColonyColorPale        1.1215     0.6898   1.626  0.10703    
+ColonyColorVery pale   1.7176     0.5655   3.037  0.00302 ** 
+ColonyColorBleached    0.8799     0.6794   1.295  0.19819    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          -2.22491    0.38288  -5.811 6.86e-08 ***
+ColonyColorPale      -0.02389    0.83847  -0.028    0.977    
+ColonyColorVery pale -0.04916    0.73010  -0.067    0.946    
+ColonyColorBleached   0.74533    0.75949   0.981    0.329    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -450.95
+                                                                                                 OTU24 
+"Bacteria_Epsilonbacteraeota_Campylobacteria_Campylobacterales_Arcobacteraceae_Arcobacter_bivalviorum" 
+
+Call:
+bbdml(formula = OTU24 ~ ColonyColor, phi.formula = ~ColonyColor, 
+    data = ps)
+
+
+Coefficients associated with abundance:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -5.3391     0.3973 -13.439  < 2e-16 ***
+ColonyColorPale        1.2889     0.8301   1.553  0.12353    
+ColonyColorVery pale   1.7437     0.5976   2.918  0.00432 ** 
+ColonyColorBleached    0.5879     0.7357   0.799  0.42603    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -2.8072     0.4528  -6.199 1.16e-08 ***
+ColonyColorPale        0.2444     0.9900   0.247    0.805    
+ColonyColorVery pale  -0.3369     0.7846  -0.429    0.669    
+ColonyColorBleached    0.1423     0.8486   0.168    0.867    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -354.56
+                                                                                 OTU36 
+"Bacteria_Bacteroidetes_Bacteroidia_Flavobacteriales_Flavobacteriaceae_Flavobacterium" 
+
+Call:
+bbdml(formula = OTU36 ~ ColonyColor, phi.formula = ~ColonyColor, 
+    data = ps)
+
+
+Coefficients associated with abundance:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -5.5685     0.4232 -13.157   <2e-16 ***
+ColonyColorPale        0.5285     0.9739   0.543    0.588    
+ColonyColorVery pale   0.6584     0.5303   1.242    0.217    
+ColonyColorBleached    0.2898     1.1752   0.247    0.806    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -2.9146     0.4802  -6.070 2.11e-08 ***
+ColonyColorPale       -0.2833     1.1502  -0.246  0.80589    
+ColonyColorVery pale  -2.2383     0.8041  -2.783  0.00639 ** 
+ColonyColorBleached    0.9425     1.2978   0.726  0.46931    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -277.67
+                                                                                  OTU110 
+"Bacteria_Proteobacteria_Gammaproteobacteria_Oceanospirillales_Halomonadaceae_Halomonas" 
+
+Call:
+bbdml(formula = OTU110 ~ ColonyColor, phi.formula = ~ColonyColor, 
+    data = ps)
+
+
+Coefficients associated with abundance:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -8.2825     1.2551  -6.599 1.77e-09 ***
+ColonyColorPale        2.7863     1.5042   1.852   0.0668 .  
+ColonyColorVery pale   2.4650     1.9201   1.284   0.2021    
+ColonyColorBleached    0.7593     2.5747   0.295   0.7686    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                     Estimate Std. Error t value Pr(>|t|)  
+(Intercept)           -3.4711     1.4056  -2.469   0.0152 *
+ColonyColorPale       -0.3134     1.7362  -0.181   0.8571  
+ColonyColorVery pale   0.5240     2.1637   0.242   0.8091  
+ColonyColorBleached    0.6172     2.8600   0.216   0.8296  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -83.59

@@ -67,8 +67,46 @@ ps@sam_data$AvgSiteTemp <- as.numeric(ps@sam_data$AvgSiteTemp)
 ps@sam_data$Salinity <- as.numeric(ps@sam_data$Salinity)
 ps@sam_data$Depth_m <- as.numeric(ps@sam_data$Depth_m)
 
-# Remove "Barcode" column
+# Change ColonyColor to non-ordered factor (Healthy Coral as reference category)
+
+ps@sam_data$ColonyColor <- plyr::mapvalues(ps@sam_data$ColonyColor,from = unique(ps@sam_data$ColonyColor),
+                to=c("Healthy","Pale","Bleached","Very pale"))
+
+ps@sam_data$ColonyColor <- factor(ps@sam_data$ColonyColor,
+                                   levels = c("Healthy","Pale","Very pale","Bleached"))
+
+# create 4 groups of avg temperature
+clus <- kmeans(na.omit(ps@sam_data$AvgSiteTemp), 3)
+clus$cluster[which(!is.na(ps@sam_data$AvgSiteTemp))] <- clus$cluster
+ps@sam_data$AvgSiteTempGroup <- clus$cluster
+
+plot(ps@sam_data$AvgSiteTemp,ps@sam_data$AvgSiteTempGroup)
+
+ps@sam_data$AvgSiteTempGroup <- plyr::mapvalues(ps@sam_data$AvgSiteTempGroup,
+                                                from=as.character(unique(ps@sam_data$AvgSiteTempGroup)),
+                                                to=c("<30.5","30.5-31",">31"))
+
+ps@sam_data$AvgSiteTempGroup[which(is.na(ps@sam_data$AvgSiteTemp))] <- NA
+
+# convert to non-ordered factor
+ps@sam_data$AvgSiteTempGroup <- factor(ps@sam_data$AvgSiteTempGroup,
+                                       levels = c("<30.5","30.5-31",">31"))
+
+
+# Remove unneeded columns
+ps@sam_data[,grep("Range",names(ps@sam_data))] <- NULL
 ps@sam_data$Barcode <- NULL
+ps@sam_data$SpeciesTentative <- NULL
+
+ps@sam_data 
+skimr::skim(ps@sam_data)
+
+unique(ps@tax_table[,2])
+# Clean up non-bacterial taxa ####
+bact <- subset_taxa(ps, Kingdom == "Bacteria")
+bact <- subset_taxa(bact, Phylum != "Cyanobacteria")
+bact <- subset_taxa(bact, Family != "Mitochondria")
+ps <- bact
 
 # Save cleaned phyloseq object
 saveRDS(ps, "./output/cleaned_ps_object.RDS")
@@ -83,7 +121,7 @@ ps_island = merge_samples(ps,"Island")
   # Rel-abund
   ps_island_ra <- transform_sample_counts(ps_island, function(x) x/sum(x))
 saveRDS(ps_island_ra,"output/ps_island_ra.RDS")
-
+ps@sam_data$ColonyColor
 # Colony Color
 ps_color <- merge_samples(ps,"ColonyColor")  
   # Repair metadata
