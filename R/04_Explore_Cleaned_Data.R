@@ -12,6 +12,9 @@ library(ggmap)
 library(corncob)
 library(patchwork)
 library(fantaxtic)
+library(doParallel)
+library(foreach)
+library(igraph) 
 source("./R/plot_bar2.R")
 
 
@@ -76,9 +79,16 @@ ggplot(meta, aes(x=Lon,y=Lat)) + geom_point()
 
 
 # Bar Plots, merged by various sample data ####
-plot_bar2(ps_color_ra,fill = "Phylum") + scale_fill_manual(values=pal)
+plot_bar2(ps_color_ra,fill = "Phylum") + scale_fill_manual(values=pal) + labs(y="Relative abundance") +
+  theme(axis.text = element_text(face = "bold",size = 12),
+        axis.title = element_text(face="bold",size=16),
+        legend.title = element_text(face="bold",size=16))
 ggsave("./output/figs/Barplot_Phylum_by_ColonyColor.png",dpi=300)
-plot_bar2(ps_island_ra,fill = "Phylum") + scale_fill_manual(values=pal)
+
+plot_bar2(ps_island_ra,fill = "Phylum") + scale_fill_manual(values=pal)  + labs(y="Relative abundance") +
+  theme(axis.text = element_text(face = "bold",size = 12),
+        axis.title = element_text(face="bold",size=16),
+        legend.title = element_text(face="bold",size=16))
 ggsave("./output/figs/Barplot_Phylum_by_Island.png",dpi=300)
 
 
@@ -118,31 +128,97 @@ ggplot(meta, aes(x=ColonyColor,y=AvgSiteTemp,fill=ColonyColor)) +
 ggsave("./output/figs/Temp_vs_ColonyColor.png",dpi=300)
 
 
+# UniFrac distance calculation ####
+set.seed(123)
+unifrac <- UniFrac(ps_ra, weighted=TRUE, normalized=TRUE, parallel=FALSE, fast=TRUE)
+
 # Ordinations ####
 
 # Transform full phyloseq object to relative abundance (again) 
 ps_ra <- transform_sample_counts(ps, function(x) x/sum(x))
 
+# Ordinations with various methods ####
 dca <- ordinate(ps_ra,method="DCA")
 nmds <- ordinate(ps_ra,method = "NMDS")
+ordu <-  ordinate(ps_ra, "PCoA", "unifrac", weighted=TRUE)
 
-plot_ordination(ps,dca,color = "ColonyColor") + scale_color_manual(values = pal[c(11,4,6,1)])
+# Plot ordinations
+plot_ordination(ps_ra,dca,color = "ColonyColor") + scale_color_manual(values = pal[c(11,4,6,1)])
 ggsave("./output/figs/DCA_Ordination_by_ColonyColor.png",dpi=300)
 
-plot_ordination(ps,dca,color = "Island")
+plot_ordination(ps_ra,dca,color = "Island")
 ggsave("./output/figs/DCA_Ordination_by_Island.png",dpi=300)
 
+plot_ordination(ps_ra, ordu, color="ColonyColor")
+ggsave("./output/figs/DCA_Ordination_by_Island.png",dpi=300)
 
 # Heatmaps ####
 names(sample_data(ps_ra))
-plot_heatmap(ps_ra, sample.label="ColonyColor",
-             low="#66CCFF", high="#000033", na.value="white",
-             method = "Unifrac")
-?plot_heatmap
+
+# order by ColonyColor
+colonycolor_order <- c(grep("Healthy",ps_ra@sam_data$ColonyColor),
+grep("Pale",meta$ColonyColor),
+grep("Very pale",meta$ColonyColor),
+grep("Bleached",meta$ColonyColor))
+colonycolor_order <- ps_ra@sam_data$LibraryID[colonycolor_order]
+
+hm_plot <- plot_heatmap(ps_ra, 
+             sample.label="ColonyColor", sample.order = colonycolor_order,
+             taxa.label = NULL, taxa.order = "Phylum",
+             low="#000033", high="#66CCFF",) +
+  labs(sample.label="Colony color",y="ESVs") +
+  theme(axis.text.y = element_blank())
+
+hm_plot$scales$scales[[2]]$name <- "Colony color"
+hm_plot$scales$scales[[1]]$name <- "ESVs"
+hm_plot$labels$fill <- "Relative abundance"
+
+hm_plot
+ggsave("./output/figs/Heatmap_ColonyColor.png",dpi=300)
+
+
+# Phylogenetic tree plots ####
+plot_tree(ps_ra,color="ColonyColor",ladderize = "left") +
+  scale_color_manual(values = pal[c(11,4,6,1)]) + 
+  theme(legend.position = "bottom")
+ggsave("./output/figs/GTR_Phylogenetic_Tree_Colored_by_ColonyColor.png",dpi=300,height = 8,width = 6)
 
 
 
+# Network analyses ####
+ig <- make_network(ps_ra, max.dist = .6)
 
+# by Coral Species
+set.seed(123)
+plot_network(ig, physeq = ps_ra, color = "SpeciesConfirmed",label = NULL) + 
+  scale_color_manual(values = pal[c(1,5)]) + labs(color = "Coral Species")
+ggsave("./output/figs/Network_Plot_Species.png",dpi=300)
+
+# by Temperature
+set.seed(123)
+plot_network(ig, physeq = ps_ra, color = "AvgSiteTemp",label = NULL) +
+  scale_color_gradient(low=pal[16],high = pal[4]) +
+  labs(color="Mean Site\nTemperature")
+ggsave("./output/figs/Network_Plot_Temperature.png",dpi=300)
+
+# by ColonyColor
+set.seed(123)
+plot_network(ig, physeq = ps_ra, color = "ColonyColor",label = NULL) +
+  scale_color_manual(values = pal[c(11,4,6,1)]) + labs(color="Colony color")
+ggsave("./output/figs/Network_Plot_ColonyColor.png",dpi=300)
+
+# by Island
+set.seed(123)
+plot_network(ig, physeq = ps_ra, color = "Island",label = NULL) +
+  scale_color_manual(values = pal)
+ggsave("./output/figs/Network_Plot_Island.png",dpi=300)
+
+# by Depth_m
+set.seed(123)
+plot_network(ig, physeq = ps_ra, color = "Depth_m",label = NULL) +
+  scale_color_gradient(low="#37b4c4",high="#2a40a1") +
+  labs(color="Depth (m)")
+ggsave("./output/figs/Network_Plot_Depth.png",dpi=300)
 
 
 

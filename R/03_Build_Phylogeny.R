@@ -71,7 +71,7 @@ fitGTR <- phangorn::optim.pml(fitGTR, model="GTR", optInv=TRUE, optGamma=TRUE,
 saveRDS(fitGTR, "./output/trees/Chagos_16S_fitGTR2.RDS") # This is the new tree using optim.pml
 write.tree(fitGTR$tree, file = "./output/trees/Chagos_16S_fitGTR2_tree.nwk")
 # re-load
-# fitGTR = readRDS("./output/trees/Chagos16S_fitGTR2.RDS") # loading new tree. does it work??
+# fitGTR = readRDS("./output/trees/Chagos_16S_fitGTR2.RDS") # loading new tree. does it work??
 
 # Bootstrap with GTR model tree
 bs = bootstrap.pml(fitGTR, bs=100, optNni=TRUE, control = pml.control(trace = 0),
