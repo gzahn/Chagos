@@ -16,7 +16,7 @@ source("./R/plot_bar2.R")
 
 
 # Register Google Maps Key
-register_google(" AIzaSyDbHOebkeBsope7kQX0fxnyx7sC_v0ap6w ")
+register_google(" ???hidden??? ")
 
 # Custom color palette
 pal = c("#c4a113","#c1593c","#643d91","#820616","#477887","#688e52",
