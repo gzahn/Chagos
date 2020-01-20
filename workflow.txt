@@ -1,6 +1,6 @@
-Rscript ./R/01_Process_Raw_Data.R
-Rscript ./R/02_Clean_and_Prepare_Processed_Data.R
-Rscript ./R/03_Build_Phylogeny.R
-Rscript ./R/04_Explore_Cleaned_Data.R
-Rscript ./R/05_Differencial_Taxon_Abundance.R
+Rscript ./R/01_Process_Raw_Data.R                   # ITSxpress, DADA2 ESV inference 
+Rscript ./R/02_Clean_and_Prepare_Processed_Data.R   # Tidy and prepare data, build phyloseq object
+Rscript ./R/03_Build_Phylogeny.R                    # Build phylogeny of 16S amplicons, add to phyloseq object
+Rscript ./R/04_Explore_Cleaned_Data.R               # Initial exploratory data analyses, alpha-diversity, plots
+Rscript ./R/05_Differencial_Taxon_Abundance.R       # Differential taxonomic abundance using corncob package
 
