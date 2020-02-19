@@ -22,17 +22,18 @@ source("./R/plot_bar2.R")
 register_google(" ???hidden??? ")
 
 # Custom color palette
-pal = c("#c4a113","#c1593c","#643d91","#820616","#477887","#688e52",
+pal = c("#c4a113","#c1593c","#643d91","#894e7d","#477887","#688e52",
         "#12aa91","#705f36","#8997b2","#753c2b","#3c3e44","#b3bf2d",
-        "#82b2a4","#894e7d","#a17fc1","#262a8e","#abb5b5","#000000",
+        "#82b2a4","#820616","#a17fc1","#262a8e","#abb5b5","#000000",
         "#493829","#816C5B","#A9A18C","#613318","#855723","#B99C6B",
         "#8F3B1B","#D57500","#DBCA69","#404F24","#668D3C","#BDD09F",
         "#4E6172","#83929F","#A3ADB8")
 
 palplot <- colorblindr::palette_plot(pal)
-
+palplot
 # Load data ####
 ps <- readRDS("./output/cleaned_ps_object_w_tree.RDS")
+names(sample_data(ps))
 
 # Merge by various factors ####
 
@@ -51,6 +52,58 @@ ps_color@sam_data$ColonyColor <- row.names(ps_color@sam_data)
 # Rel-abund
 ps_color_ra <- transform_sample_counts(ps_color, function(x) x/sum(x))
 saveRDS(ps_color_ra,"./output/ps_color_ra.RDS")
+
+# Coral Species ##
+ps_species <- merge_samples(ps,"SpeciesConfirmed")  
+# Repair metadata
+ps_species@sam_data$SpeciesConfirmed <- row.names(ps_species@sam_data)
+# Rel-abund
+ps_species_ra <- transform_sample_counts(ps_species, function(x) x/sum(x))
+saveRDS(ps_species_ra,"./output/ps_species_ra.RDS")
+
+# Avg Site Temp Group ##
+ps_temp <- merge_samples(ps,"AvgSiteTempGroup")
+# Repair metadata
+ps_temp@sam_data$AvgSiteTempGroup <- row.names(ps_temp@sam_data)
+# Rel-abund
+ps_temp_ra <- transform_sample_counts(ps_temp, function(x) x/sum(x))
+saveRDS(ps_temp_ra,"./output/ps_temp_ra.RDS")
+
+
+# BarPlots of relabundance for the merged data ####
+
+plot_bar2(ps_island_ra, fill = "Phylum") + labs(x="Island",y="Relative abundance") +  # island
+  theme_bw() + 
+  scale_fill_manual(values = pal) + 
+  theme(axis.text.x = element_text(angle=60,hjust=1),
+        axis.title = element_text(face="bold",size=16),
+        legend.title = element_text(face="bold",size=16))
+ggsave("./output/figs/Barplot_Phylum_relabund_by_Island.png",dpi=300)
+
+plot_bar2(ps_color_ra, fill = "Phylum") + labs(x="Coral color",y="Relative abundance") +  # color
+  theme_bw() + 
+  theme(axis.title = element_text(face="bold",size=16),
+        legend.title = element_text(face="bold",size=16)) +
+  scale_fill_manual(values = pal) + theme(axis.text.x = element_text(angle=60,hjust=1))
+ggsave("./output/figs/Barplot_Phylum_relabund_by_Coral_Color.png",dpi=300)
+
+plot_bar2(ps_species_ra, fill = "Phylum") + labs(x="Coral species",y="Relative abundance") +  # species
+  theme_bw() +
+  theme(axis.text.x = element_text(face = "italic"),
+        axis.title = element_text(face="bold",size=16),
+        legend.title = element_text(face="bold",size=16)) + 
+  scale_fill_manual(values = pal) 
+ggsave("./output/figs/Barplot_Phylum_relabund_by_Coral_Species.png",dpi=300)
+
+plot_bar2(ps_temp_ra, fill = "Phylum") + labs(x="Temperature group",y="Relative abundance") +  # temp
+  theme_bw() + 
+  theme(axis.text.x = element_text(face="bold",size=12),
+        axis.title = element_text(face="bold",size=16),
+        legend.title = element_text(face="bold",size=16)) +
+  scale_fill_manual(values = pal) 
+ggsave("./output/figs/Barplot_Phylum_relabund_by_Temp.png",dpi=300)
+
+
 
 
 # Transform full phyloseq object to relative abundance ####
@@ -78,25 +131,12 @@ ggmap(chagosmap) +
 ggplot(meta, aes(x=Lon,y=Lat)) + geom_point()
 
 
-# Bar Plots, merged by various sample data ####
-plot_bar2(ps_color_ra,fill = "Phylum") + scale_fill_manual(values=pal) + labs(y="Relative abundance") +
-  theme(axis.text = element_text(face = "bold",size = 12),
-        axis.title = element_text(face="bold",size=16),
-        legend.title = element_text(face="bold",size=16))
-ggsave("./output/figs/Barplot_Phylum_by_ColonyColor.png",dpi=300)
-
-plot_bar2(ps_island_ra,fill = "Phylum") + scale_fill_manual(values=pal)  + labs(y="Relative abundance") +
-  theme(axis.text = element_text(face = "bold",size = 12),
-        axis.title = element_text(face="bold",size=16),
-        legend.title = element_text(face="bold",size=16))
-ggsave("./output/figs/Barplot_Phylum_by_Island.png",dpi=300)
-
 
 # Plot richness based on ColonyColor ####
 plot_richness(ps,x="ColonyColor",measures=c("Shannon","Observed"))
 
 richness = specnumber(otu_table(ps_ra))
-shannon = diversity(otu_table(ps_ra),index = "shannon")
+shannon = vegan::diversity(otu_table(ps_ra),index = "shannon")
 plot(ps_ra@sam_data$AvgSiteTemp,shannon)
 
 
@@ -105,6 +145,12 @@ mod.shannon = aov(data=meta, shannon ~ (Island + ColonyColor + AvgSiteTemp)* Spe
 mod.richness = aov(data=meta, richness ~ (Island + ColonyColor + AvgSiteTemp)* SpeciesConfirmed)
 summary(mod.shannon)
 summary(mod.richness)
+
+glm.shannon = glm(data=meta, shannon ~ (Island + ColonyColor + AvgSiteTemp)* SpeciesConfirmed)
+car::Anova(glm.shannon)
+glm.richness = glm(data=meta, richness ~ (Island + ColonyColor + AvgSiteTemp)* SpeciesConfirmed)
+car::Anova(glm.richness)
+
 
 # Stepwise AIC
 step = stepAIC(mod.shannon)
@@ -119,12 +165,23 @@ summary(step2)
 #                 ColonyColor is 'not quite significant'
 
 
+# Make output file of stat tables for alpha diversity ##
+sink("./output/stats/alpha_diversity_models.txt")
+print("Shannon Diversity Stats Table")
+car::Anova(glm.shannon)
+print("Richness Stats Table")
+car::Anova(glm.richness)
+sink(NULL)
+
 # What is correlation between ColonyColor and AvgSiteTemp
 plot(meta$ColonyColor,meta$AvgSiteTemp)
 ggplot(meta, aes(x=ColonyColor,y=AvgSiteTemp,fill=ColonyColor)) + 
   geom_boxplot(alpha=.5) + geom_point(alpha=.5) +
   labs(y="Mean Site Temperature",x="Colony Color",fill="Colony Color") +
-  scale_fill_manual(values = pal[c(11,4,6,1)]) + theme_bw()
+  scale_fill_manual(values = pal[c(11,4,6,1)]) + theme_bw() +
+  theme(axis.text.x = element_text(face="bold",size=12),
+        axis.title = element_text(face="bold",size=16),
+        legend.title = element_text(face="bold",size=16))
 ggsave("./output/figs/Temp_vs_ColonyColor.png",dpi=300)
 
 
@@ -236,18 +293,6 @@ ggsave("./output/figs/Network_Plot_Depth.png",dpi=300)
 
 
 
-
-
-
-
-
-# x-axis = samples, y-axis = relative abundance of WHATEVER group
-
-# Find potential taxa to plot
-plot_bar2(ps_ra,fill="Phylum") + scale_fill_manual(values = pal)
-
-cyanobacteria = subset_taxa(ps_ra, Phylum = "Bacteroidetes")
-plot_bar2(cyanobacteria, fill="ColonyColor")
 
 
 

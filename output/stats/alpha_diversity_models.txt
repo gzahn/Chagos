@@ -1,0 +1,28 @@
+[1] "Shannon Diversity Stats Table"
+Analysis of Deviance Table (Type II tests)
+
+Response: shannon
+                             LR Chisq Df Pr(>Chisq)    
+Island                         44.530  8  4.517e-07 ***
+ColonyColor                     2.521  3    0.47150    
+AvgSiteTemp                     3.996  1    0.04560 *  
+SpeciesConfirmed                4.241  1    0.03946 *  
+Island:SpeciesConfirmed         8.312  2    0.01567 *  
+ColonyColor:SpeciesConfirmed    1.084  3    0.78095    
+AvgSiteTemp:SpeciesConfirmed    3.099  1    0.07832 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+[1] "Richness Stats Table"
+Analysis of Deviance Table (Type II tests)
+
+Response: richness
+                             LR Chisq Df Pr(>Chisq)    
+Island                         42.653  8  1.021e-06 ***
+ColonyColor                     5.595  3  0.1330693    
+AvgSiteTemp                    11.154  1  0.0008387 ***
+SpeciesConfirmed                0.310  1  0.5779654    
+Island:SpeciesConfirmed        10.632  2  0.0049130 ** 
+ColonyColor:SpeciesConfirmed    5.381  3  0.1459517    
+AvgSiteTemp:SpeciesConfirmed    5.573  1  0.0182426 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

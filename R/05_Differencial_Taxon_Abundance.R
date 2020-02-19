@@ -12,7 +12,10 @@ library(ggmap)
 library(corncob)
 library(patchwork)
 library(fantaxtic)
+library(dada2)
+library(Biostrings)
 source("./R/plot_bar2.R")
+
 
 # Custom color palette
 pal = c("#c4a113","#c1593c","#643d91","#820616","#477887","#688e52",
@@ -25,16 +28,22 @@ pal = c("#c4a113","#c1593c","#643d91","#820616","#477887","#688e52",
 palplot <- colorblindr::palette_plot(pal)
 
 # Load data ####
-ps <- readRDS("./output/cleaned_ps_object.RDS")
+ps <- readRDS("./output/cleaned_ps_object_w_tree.RDS")
+ps@refseq
+
+# Extract sequences and add to phlyloseq object ####
+seqs <- rownames(tax_table(ps))
+
+if(identical(seqs,rownames(tax_table(ps)))){
+  ps@refseq <- DNAStringSet(x=seqs)
+}
 
 # clean taxa names
 ps <- clean_taxa_names(ps)
 
 # Differential Abundance Based on Colony Color ####
 
-# Find differentially-abundant groups...plot them as in http://statisticaldiversitylab.com/blog/167093
-
-names(sample_data(ps))
+# Find differentially-abundant groups ##
 set.seed(123)
 da_analysis <- differentialTest(formula = ~ ColonyColor, #abundance
                                 phi.formula = ~ 1, #dispersion
@@ -48,8 +57,13 @@ plot(da_analysis)
 ggsave("./output/figs/colonycolor_differential_abundance_plot.png",dpi = 300,width = 14,height = 6)
 
 sigs_colcolor <- otu_to_taxonomy(OTU = da_analysis$significant_taxa, data = ps)
-length(sigs_colcolor)
 
+
+# Extract sequences from taxa with significant differential abundance
+sigs_colcolor_seqs <- which(taxa_names(ps) %in% names(sigs_colcolor))
+x <- ps@refseq[sigs_colcolor_seqs]
+names(x) <- paste0(names(x),"_", otu_to_taxonomy(names(x),ps))
+writeXStringSet(x, "./output/ColonyColor_Significant_Taxa_Seqs.fasta", append=FALSE, compress=FALSE, compression_level=NA, format="fasta")
 
 
 # Plot differentially-abundant taxa (Colony Color) ####
@@ -143,33 +157,136 @@ plot(da_analysis_temp)
 ggsave("./output/figs/tempgroup_differential_abundance_plot.png",width = 16,height = 6)
 
 sigs_tempgroup <- otu_to_taxonomy(OTU = da_analysis_temp$significant_taxa, data = ps)
-length(sigs_tempgroup)
-length(ps@sam_data$AvgSiteTempGroup)
-levels(ps@sam_data$AvgSiteTempGroup)
 
+# Extract sequences from taxa with significant differential abundance
+sigs_tempgroup_seqs <- which(taxa_names(ps) %in% names(sigs_tempgroup))
+x <- ps@refseq[sigs_tempgroup_seqs]
+names(x) <- paste0(names(x),"_", otu_to_taxonomy(names(x),ps))
+writeXStringSet(x, "./output/TempGroup_Significant_Taxa_Seqs2.fasta", append=FALSE, compress=FALSE, compression_level=NA, format="fasta")
+
+temp_diff_otus <- unlist(purrr::map(str_split(names(x),"_"),1))
+temp_diff_otus <- noquote(temp_diff_otus)
+
+
+
+# Corncob plots of differential abundance
 set.seed(123)
-corncob_da7 <- bbdml(formula = OTU1 ~ AvgSiteTempGroup,
+corncob_da7 <- bbdml(formula = OTU11 ~ AvgSiteTempGroup,
                      phi.formula = ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
 p7 <- plot(corncob_da7,color = "AvgSiteTempGroup") + ggtitle(sigs_tempgroup[1]) + 
   scale_color_manual(values = pal[c(11,3,6)]) + 
-  theme(axis.text.x = element_blank())
+  theme(axis.text.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position = "none")
 
 set.seed(123)
-corncob_da8 <- bbdml(formula = OTU3 ~ AvgSiteTempGroup,
+corncob_da8 <- bbdml(formula = OTU12 ~ AvgSiteTempGroup,
                      phi.formula = ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
 p8 <- plot(corncob_da8,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[2]) + 
   scale_color_manual(values = pal[c(11,3,6)]) + 
-  theme(axis.text.x = element_blank())
+  theme(axis.text.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position = "none")
 
-temp_group_plot <- p7 / p8
+set.seed(123)
+corncob_da9 <- bbdml(formula = OTU18 ~ AvgSiteTempGroup,
+                     phi.formula = ~ AvgSiteTempGroup,
+                     data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+p9 <- plot(corncob_da9,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[3]) + 
+  scale_color_manual(values = pal[c(11,3,6)]) + 
+  theme(axis.text.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position = "none")
+
+set.seed(123)
+corncob_da10 <- bbdml(formula = OTU19 ~ AvgSiteTempGroup,
+                     phi.formula = ~ AvgSiteTempGroup,
+                     data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+p10 <- plot(corncob_da10,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[4]) + 
+  scale_color_manual(values = pal[c(11,3,6)]) + 
+  theme(axis.text.x = element_blank(),
+        axis.title = element_text(face="bold",size=16))
+
+
+set.seed(123)
+corncob_da11 <- bbdml(formula = OTU21 ~ AvgSiteTempGroup,
+                     phi.formula = ~ AvgSiteTempGroup,
+                     data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+p11 <- plot(corncob_da11,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[5]) + 
+  scale_color_manual(values = pal[c(11,3,6)]) + 
+  theme(axis.text.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position = "none")
+
+set.seed(123)
+corncob_da12 <- bbdml(formula = OTU27 ~ AvgSiteTempGroup,
+                     phi.formula = ~ AvgSiteTempGroup,
+                     data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+p12 <- plot(corncob_da12,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[6]) + 
+  scale_color_manual(values = pal[c(11,3,6)]) + 
+  theme(axis.text.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position = "none")
+
+set.seed(123)
+corncob_da13 <- bbdml(formula = OTU28 ~ AvgSiteTempGroup,
+                     phi.formula = ~ AvgSiteTempGroup,
+                     data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+p13 <- plot(corncob_da13,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[7]) + 
+  scale_color_manual(values = pal[c(11,3,6)]) + 
+  theme(axis.text.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position = "none")
+
+
+
+temp_group_plot <- p7 / p8 / p9 / p10 / p11 / p12 / p13
 temp_group_plot
-ggsave(temp_group_plot,filename = "./output/figs/TempGroup_diff_abund_taxa.png",
-       dpi=300,width = 12, height = 6,device = "png")
 
+ggsave(temp_group_plot,filename = "./output/figs/TempGroup_diff_abund_taxa.png",
+       dpi=300,width = 12, height = 16,device = "png")
+
+
+# Stat tables for differential abundance of OTUS by colony color and temperature ####
+sink("./output/stats/corncob_ColonyColor_tables.txt")
+print(sigs_colcolor[1])
+corncob_da1
+print(sigs_colcolor[2])
+corncob_da2
+print(sigs_colcolor[3])
+corncob_da3
+print(sigs_colcolor[4])
+corncob_da4
+print(sigs_colcolor[5])
+corncob_da5
+sink(NULL)
+
+
+sink("./output/stats/corncob_TempGroup_tables.txt")
+print(sigs_tempgroup[1])
+corncob_da7
+print(sigs_tempgroup[2])
+corncob_da8
+print(sigs_tempgroup[3])
+corncob_da9
+print(sigs_tempgroup[4])
+corncob_da10
+print(sigs_tempgroup[5])
+corncob_da11
+print(sigs_tempgroup[6])
+corncob_da12
+print(sigs_tempgroup[7])
+corncob_da13
+sunk(NULL)
 
 
 # Relative abundance plots ####
@@ -195,4 +312,6 @@ phyloseq::psmelt(ps_family) %>%
   scale_color_manual(values = pal[c(11,4,6,1)])
 
 ggsave("./output/figs/most_abundant_families_by_colonycolor.png",dpi=300,width = 10,height = 6)
+
+
 
