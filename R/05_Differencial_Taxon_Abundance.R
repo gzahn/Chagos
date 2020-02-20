@@ -53,7 +53,10 @@ da_analysis <- differentialTest(formula = ~ ColonyColor, #abundance
                                 data = ps,
                                 fdr_cutoff = 0.05)
 
-plot(da_analysis)
+plot(da_analysis) + labs(y="Differentially abundant taxa\n(relative abundance)") +
+  theme(axis.text.y = element_text(face="bold.italic"),
+        axis.title.y = element_text(face="bold",size=16),
+        strip.text = element_text(face="bold",size=12))
 ggsave("./output/figs/colonycolor_differential_abundance_plot.png",dpi = 300,width = 14,height = 6)
 
 sigs_colcolor <- otu_to_taxonomy(OTU = da_analysis$significant_taxa, data = ps)
@@ -67,7 +70,7 @@ writeXStringSet(x, "./output/ColonyColor_Significant_Taxa_Seqs.fasta", append=FA
 
 
 # Plot differentially-abundant taxa (Colony Color) ####
-
+da_analysis$significant_taxa
 # glm models with ColonyColor and no intercept
 
 sigs_colcolor
@@ -79,8 +82,8 @@ corncob_da1 <- bbdml(formula = OTU8 ~ ColonyColor,
                      data = ps)
 
 p1 <- plot(corncob_da1,color="ColonyColor") + ggtitle(sigs_colcolor[1]) + 
-  scale_color_manual(values = pal[c(11,4,6,1)]) + 
-  theme(axis.text.x = element_blank())
+  scale_color_manual(values = pal[c(11,4,6,1)]) + labs(y="") + 
+  theme(axis.text.x = element_blank()) 
 
 set.seed(123)
 corncob_da2 <- bbdml(formula = OTU14 ~ ColonyColor,
@@ -88,7 +91,7 @@ corncob_da2 <- bbdml(formula = OTU14 ~ ColonyColor,
                      data = ps)
 
 p2 <- plot(corncob_da2,color="ColonyColor") + ggtitle(sigs_colcolor[2]) + 
-  scale_color_manual(values = pal[c(11,4,6,1)]) + 
+  scale_color_manual(values = pal[c(11,4,6,1)]) + labs(y="") + 
   theme(axis.text.x = element_blank()) 
 
 set.seed(123)
@@ -106,7 +109,7 @@ corncob_da4 <- bbdml(formula = OTU36 ~ ColonyColor,
                      data = ps)
 
 p4 <- plot(corncob_da4,color="ColonyColor") + ggtitle(sigs_colcolor[4]) + 
-  scale_color_manual(values = pal[c(11,4,6,1)]) + 
+  scale_color_manual(values = pal[c(11,4,6,1)]) + labs(y="") + 
   theme(axis.text.x = element_blank())
 
 set.seed(123)
@@ -115,7 +118,7 @@ corncob_da5 <- bbdml(formula = OTU110 ~ ColonyColor,
                      data = ps)
 
 p5 <- plot(corncob_da5,color="ColonyColor") + ggtitle(sigs_colcolor[5]) + 
-  scale_color_manual(values = pal[c(11,4,6,1)]) + 
+  scale_color_manual(values = pal[c(11,4,6,1)]) + labs(y="") + 
   theme(axis.text.x = element_blank())
 
 # combine figs with patchwork
@@ -288,6 +291,45 @@ print(sigs_tempgroup[7])
 corncob_da13
 sunk(NULL)
 
+# Differentially abundant taxa, split by coral species ####
+
+# Split data by Coral Species
+Pacuta <- subset_samples(ps,SpeciesConfirmed == "P. acuta")
+Pdamicornis <- subset_samples(ps,SpeciesConfirmed == "P. damicornis")
+
+
+# Differential abundance test in P acuta by Colony Color 
+set.seed(123)
+Pacuta_da_analysis <- differentialTest(formula = ~ ColonyColor, #abundance
+                                phi.formula = ~ 1, #dispersion
+                                formula_null = ~ 1, #mean
+                                phi.formula_null = ~ 1,
+                                test = "Wald", boot = FALSE,
+                                data = Pacuta,
+                                fdr_cutoff = 0.05)
+
+pacuplot <- plot(Pacuta_da_analysis) + theme(axis.title.y = element_text(size=12,face="bold"))
+pacuplot
+ggsave("./output/figs/Pacuta_differential_abundance_by_ColonyColor_plot.png",width = 16,height = 6)
+
+# Differential abundance test in P damicornis by Colony Color
+set.seed(123)
+Pdamicornis_da_analysis <- differentialTest(formula = ~ ColonyColor, #abundance
+                                       phi.formula = ~ 1, #dispersion
+                                       formula_null = ~ 1, #mean
+                                       phi.formula_null = ~ 1,
+                                       test = "Wald", boot = FALSE,
+                                       data = Pdamicornis,
+                                       fdr_cutoff = 0.05)
+
+pdamiplot <- plot(Pdamicornis_da_analysis) + theme(axis.title.y = element_text(size=12,face="bold"))
+pdamiplot
+ggsave("./output/figs/Pdamicornis_differential_abundance_by_ColonyColor_plot.png",width = 16,height = 6)
+
+
+pacuplot / pdamiplot
+ggsave("./output/figs/acuta_and_damicornis_taxa_differential_abundance_combined_plot.png",width = 16,height = 8)
+
 
 # Relative abundance plots ####
 
@@ -305,9 +347,9 @@ phyloseq::taxa_names(ps_family) <- phyloseq::tax_table(ps_family)[, "Family"]
 phyloseq::psmelt(ps_family) %>%
   ggplot(data = ., aes(x = ColonyColor, y = Abundance,color=ColonyColor)) +
   geom_boxplot(outlier.shape  = NA) +
-  geom_jitter(height = 0, width = .2,alpha=.5) +
+  geom_jitter(height = 0, width = .2,alpha=.5) + theme_bw() +
   labs(x = "", y = "Abundance\n") +
-  facet_wrap(~ OTU, scales = "free") +
+  facet_wrap(~ OTU) +
   theme(legend.position = "bottom", axis.text.x = element_blank()) +
   scale_color_manual(values = pal[c(11,4,6,1)])
 
