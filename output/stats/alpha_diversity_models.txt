@@ -1,4 +1,5 @@
 [1] "Shannon Diversity Stats Table"
+shannon ~ (Island + ColonyColor + AvgSiteTemp) * SpeciesConfirmed
 Analysis of Deviance Table (Type II tests)
 
 Response: shannon
@@ -13,6 +14,7 @@ AvgSiteTemp:SpeciesConfirmed    3.099  1    0.07832 .
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 [1] "Richness Stats Table"
+richness ~ (Island + ColonyColor + AvgSiteTemp) * SpeciesConfirmed
 Analysis of Deviance Table (Type II tests)
 
 Response: richness

@@ -68,29 +68,34 @@ saveRDS(ps_temp_ra,"./output/ps_temp_ra.RDS")
 
 # BarPlots of relabundance for the merged data ####
 
+# phylum by island
 plot_bar2(ps_island_ra, fill = "Phylum") + labs(x="Island",y="Relative abundance") +  # island
   theme_bw() + 
   scale_fill_manual(values = pal.discrete) + 
-  theme(axis.text.x = element_text(angle=60,hjust=1),
+  theme(axis.text.x = element_text(angle=60,hjust=1,face="bold"),
         axis.title = element_text(face="bold",size=16),
         legend.title = element_text(face="bold",size=16))
 ggsave("./output/figs/Barplot_Phylum_relabund_by_Island.png",dpi=300)
 
+# by coral colony color
 plot_bar2(ps_color_ra, fill = "Phylum") + labs(x="Coral color",y="Relative abundance") +  # color
   theme_bw() + 
   theme(axis.title = element_text(face="bold",size=16),
         legend.title = element_text(face="bold",size=16)) +
+        axis.text.x = element_text(angle=60,hjust=1,face="bold")) +
   scale_fill_manual(values = pal.discrete) + theme(axis.text.x = element_text(angle=60,hjust=1))
 ggsave("./output/figs/Barplot_Phylum_relabund_by_Coral_Color.png",dpi=300)
 
+# by coral species
 plot_bar2(ps_species_ra, fill = "Phylum") + labs(x="Coral species",y="Relative abundance") +  # species
   theme_bw() +
-  theme(axis.text.x = element_text(face = "italic"),
+  theme(axis.text.x = element_text(face = "bold.italic"),
         axis.title = element_text(face="bold",size=16),
         legend.title = element_text(face="bold",size=16)) + 
   scale_fill_manual(values = pal.discrete) 
 ggsave("./output/figs/Barplot_Phylum_relabund_by_Coral_Species.png",dpi=300)
 
+# by temp group
 plot_bar2(ps_temp_ra, fill = "Phylum") + labs(x="Temperature group",y="Relative abundance") +  # temp
   theme_bw() + 
   theme(axis.text.x = element_text(face="bold",size=12),
@@ -98,8 +103,6 @@ plot_bar2(ps_temp_ra, fill = "Phylum") + labs(x="Temperature group",y="Relative 
         legend.title = element_text(face="bold",size=16)) +
   scale_fill_manual(values = pal.discrete) 
 ggsave("./output/figs/Barplot_Phylum_relabund_by_Temp.png",dpi=300)
-
-
 
 
 # Transform full phyloseq object to relative abundance ####
@@ -113,7 +116,7 @@ names(sample_data(ps))
 skimr::skim(sample_data(ps_ra))
 apply(ps_ra@sam_data,2,table)
 
-# make data frame of sample data ####
+# make data frame of sample data #
 meta = as(sample_data(ps_ra),"data.frame")
 
 # Map of sites ####
@@ -164,8 +167,10 @@ summary(step2)
 # Make output file of stat tables for alpha diversity ##
 sink("./output/stats/alpha_diversity_models.txt")
 print("Shannon Diversity Stats Table")
+print(formula(glm.shannon))
 car::Anova(glm.shannon)
 print("Richness Stats Table")
+print(formula(glm.richness))
 car::Anova(glm.richness)
 sink(NULL)
 
@@ -190,20 +195,21 @@ unifrac <- UniFrac(ps_ra, weighted=TRUE, normalized=TRUE, parallel=FALSE, fast=T
 # Transform full phyloseq object to relative abundance (again) 
 ps_ra <- transform_sample_counts(ps, function(x) x/sum(x))
 
-# Ordinations with various methods ####
+# Ordinations with various methods #
 dca <- ordinate(ps_ra,method="DCA")
 nmds <- ordinate(ps_ra,method = "NMDS")
 ordu <-  ordinate(ps_ra, "PCoA", "unifrac", weighted=TRUE)
 
 # Plot ordinations
 plot_ordination(ps_ra,dca,color = "ColonyColor") + scale_color_manual(values = pal.discrete[c(11,4,6,1)])
+  theme_bw()
 ggsave("./output/figs/DCA_Ordination_by_ColonyColor.png",dpi=300)
 
-plot_ordination(ps_ra,dca,color = "Island")
+plot_ordination(ps_ra,dca,color = "Island") + theme_bw() + scale_color_manual(values=pal)
 ggsave("./output/figs/DCA_Ordination_by_Island.png",dpi=300)
 
-plot_ordination(ps_ra, ordu, color="ColonyColor")
-ggsave("./output/figs/DCA_Ordination_by_Island.png",dpi=300)
+plot_ordination(ps_ra, ordu, color="ColonyColor") + theme_bw() + scale_color_manual(values = pal[c(11,4,6,1)])
+ggsave("./output/figs/PCoA_Ordination_by_ColonyColor.png",dpi=300)
 
 # Heatmaps ####
 names(sample_data(ps_ra))
@@ -218,7 +224,7 @@ colonycolor_order <- ps_ra@sam_data$LibraryID[colonycolor_order]
 hm_plot <- plot_heatmap(ps_ra, 
              sample.label="ColonyColor", sample.order = colonycolor_order,
              taxa.label = NULL, taxa.order = "Phylum",
-             low="#000033", high="#66CCFF",) +
+             low="#000033", high="#66CCFF") +
   labs(sample.label="Colony color",y="ESVs") +
   theme(axis.text.y = element_blank())
 
@@ -231,12 +237,12 @@ ggsave("./output/figs/Heatmap_ColonyColor.png",dpi=300)
 
 
 # Phylogenetic tree plots ####
-plot_tree(ps_ra,color="ColonyColor",ladderize = "left") +
+plot_tree(ps_ra,color="ColonyColor",ladderize = "left",base.spacing = .04) +
   scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
-  theme(legend.position = "bottom")
-ggsave("./output/figs/GTR_Phylogenetic_Tree_Colored_by_ColonyColor.png",dpi=300,height = 8,width = 6)
-
-
+  theme(legend.position = "bottom",
+        legend.title = element_text(size=14,face="bold"),
+        legend.text = element_text(size=12,face="bold"))
+ggsave("./output/figs/GTR_Phylogenetic_Tree_Colored_by_ColonyColor.png",dpi=300,height = 14,width = 6)
 
 # Network analyses ####
 ig <- make_network(ps_ra, max.dist = .6)
