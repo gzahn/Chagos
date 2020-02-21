@@ -272,7 +272,7 @@ corncob_da4
 print(sigs_colcolor[5])
 corncob_da5
 sink(NULL)
-
+ps@sam_data$AvgSiteTempGroup
 
 sink("./output/stats/corncob_TempGroup_tables.txt")
 print(sigs_tempgroup[1])
@@ -289,7 +289,7 @@ print(sigs_tempgroup[6])
 corncob_da12
 print(sigs_tempgroup[7])
 corncob_da13
-sunk(NULL)
+sink(NULL)
 
 # Differentially abundant taxa, split by coral species ####
 
@@ -315,9 +315,9 @@ ggsave("./output/figs/Pacuta_differential_abundance_by_ColonyColor_plot.png",wid
 # Differential abundance test in P damicornis by Colony Color
 set.seed(123)
 Pdamicornis_da_analysis <- differentialTest(formula = ~ ColonyColor, #abundance
-                                       phi.formula = ~ 1, #dispersion
+                                       phi.formula = ~ ColonyColor, #dispersion
                                        formula_null = ~ 1, #mean
-                                       phi.formula_null = ~ 1,
+                                       phi.formula_null = ~ ColonyColor,
                                        test = "Wald", boot = FALSE,
                                        data = Pdamicornis,
                                        fdr_cutoff = 0.05)
@@ -326,11 +326,30 @@ pdamiplot <- plot(Pdamicornis_da_analysis) + theme(axis.title.y = element_text(s
 pdamiplot
 ggsave("./output/figs/Pdamicornis_differential_abundance_by_ColonyColor_plot.png",width = 16,height = 6)
 
-
 pacuplot / pdamiplot
 ggsave("./output/figs/acuta_and_damicornis_taxa_differential_abundance_combined_plot.png",width = 16,height = 8)
 
 
+# Full differential abund and dispersion test ####
+# Differential abundance test, controlling for effect of colony color on dispersion and controlling
+# for effect of Coral Species on abundance
+
+#rename columns in metadata for prettier plot
+names(ps@sam_data)[10] <- "CoralSpecies"
+
+set.seed(123)
+Full_da_analysis <- differentialTest(formula = ~ ColonyColor + CoralSpecies, #abundance
+                                            phi.formula = ~ ColonyColor, #dispersion
+                                            formula_null = ~ CoralSpecies, #mean
+                                            phi.formula_null = ~ 1,
+                                            test = "Wald", boot = FALSE,
+                                            data = ps,
+                                            fdr_cutoff = 0.05)
+
+plot(Full_da_analysis) + theme(axis.title.y = element_text(size=12,face="bold")) +
+  labs(caption = "Joint test for differential abundance and variability across Colony Color,\n
+       controlling for the effect of Coral Species on abundance")
+ggsave("./output/figs/Full_da_test.png",width = 16,height = 8,dpi=300)
 # Relative abundance plots ####
 
 # Top 12 taxa with highest relative abundance
