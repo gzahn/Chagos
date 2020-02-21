@@ -16,16 +16,10 @@ library(dada2)
 library(Biostrings)
 source("./R/plot_bar2.R")
 
-
-# Custom color palette
-pal = c("#c4a113","#c1593c","#643d91","#820616","#477887","#688e52",
-        "#12aa91","#705f36","#8997b2","#753c2b","#3c3e44","#b3bf2d",
-        "#82b2a4","#894e7d","#a17fc1","#262a8e","#abb5b5","#000000",
-        "#493829","#816C5B","#A9A18C","#613318","#855723","#B99C6B",
-        "#8F3B1B","#D57500","#DBCA69","#404F24","#668D3C","#BDD09F",
-        "#4E6172","#83929F","#A3ADB8")
-
-palplot <- colorblindr::palette_plot(pal)
+# Custom color palettes
+source("./R/palettes.R")
+colorblindr::palette_plot(pal.discrete)
+colorblindr::palette_plot(pal.continuous)
 
 # Load data ####
 ps <- readRDS("./output/cleaned_ps_object_w_tree.RDS")
@@ -71,7 +65,7 @@ writeXStringSet(x, "./output/ColonyColor_Significant_Taxa_Seqs.fasta", append=FA
 # glm models with ColonyColor and no intercept
 
 sigs_colcolor
-colorblindr::palette_plot(pal)
+colorblindr::palette_plot(pal.discrete)
 
 set.seed(123)
 corncob_da1 <- bbdml(formula = OTU8 ~ ColonyColor,
@@ -79,7 +73,7 @@ corncob_da1 <- bbdml(formula = OTU8 ~ ColonyColor,
                      data = ps)
 
 p1 <- plot(corncob_da1,color="ColonyColor") + ggtitle(sigs_colcolor[1]) + 
-  scale_color_manual(values = pal[c(11,4,6,1)]) + 
+  scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
   theme(axis.text.x = element_blank())
 
 set.seed(123)
@@ -88,7 +82,7 @@ corncob_da2 <- bbdml(formula = OTU14 ~ ColonyColor,
                      data = ps)
 
 p2 <- plot(corncob_da2,color="ColonyColor") + ggtitle(sigs_colcolor[2]) + 
-  scale_color_manual(values = pal[c(11,4,6,1)]) + 
+  scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
   theme(axis.text.x = element_blank()) 
 
 set.seed(123)
@@ -97,7 +91,7 @@ corncob_da3 <- bbdml(formula = OTU24 ~ ColonyColor,
                      data = ps)
 
 p3 <- plot(corncob_da3,color="ColonyColor") + ggtitle(sigs_colcolor[3]) + 
-  scale_color_manual(values = pal[c(11,4,6,1)]) + 
+  scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
   theme(axis.text.x = element_blank())
 
 set.seed(123)
@@ -106,7 +100,7 @@ corncob_da4 <- bbdml(formula = OTU36 ~ ColonyColor,
                      data = ps)
 
 p4 <- plot(corncob_da4,color="ColonyColor") + ggtitle(sigs_colcolor[4]) + 
-  scale_color_manual(values = pal[c(11,4,6,1)]) + 
+  scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
   theme(axis.text.x = element_blank())
 
 set.seed(123)
@@ -115,7 +109,7 @@ corncob_da5 <- bbdml(formula = OTU110 ~ ColonyColor,
                      data = ps)
 
 p5 <- plot(corncob_da5,color="ColonyColor") + ggtitle(sigs_colcolor[5]) + 
-  scale_color_manual(values = pal[c(11,4,6,1)]) + 
+  scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
   theme(axis.text.x = element_blank())
 
 # combine figs with patchwork
@@ -176,7 +170,7 @@ corncob_da7 <- bbdml(formula = OTU11 ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
 p7 <- plot(corncob_da7,color = "AvgSiteTempGroup") + ggtitle(sigs_tempgroup[1]) + 
-  scale_color_manual(values = pal[c(11,3,6)]) + 
+  scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
         legend.position = "none")
@@ -187,7 +181,7 @@ corncob_da8 <- bbdml(formula = OTU12 ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
 p8 <- plot(corncob_da8,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[2]) + 
-  scale_color_manual(values = pal[c(11,3,6)]) + 
+  scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
         legend.position = "none")
@@ -198,7 +192,7 @@ corncob_da9 <- bbdml(formula = OTU18 ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
 p9 <- plot(corncob_da9,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[3]) + 
-  scale_color_manual(values = pal[c(11,3,6)]) + 
+  scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
         legend.position = "none")
@@ -209,7 +203,7 @@ corncob_da10 <- bbdml(formula = OTU19 ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
 p10 <- plot(corncob_da10,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[4]) + 
-  scale_color_manual(values = pal[c(11,3,6)]) + 
+  scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title = element_text(face="bold",size=16))
 
@@ -220,7 +214,7 @@ corncob_da11 <- bbdml(formula = OTU21 ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
 p11 <- plot(corncob_da11,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[5]) + 
-  scale_color_manual(values = pal[c(11,3,6)]) + 
+  scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
         legend.position = "none")
@@ -231,7 +225,7 @@ corncob_da12 <- bbdml(formula = OTU27 ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
 p12 <- plot(corncob_da12,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[6]) + 
-  scale_color_manual(values = pal[c(11,3,6)]) + 
+  scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
         legend.position = "none")
@@ -242,7 +236,7 @@ corncob_da13 <- bbdml(formula = OTU28 ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
 p13 <- plot(corncob_da13,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[7]) + 
-  scale_color_manual(values = pal[c(11,3,6)]) + 
+  scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
         legend.position = "none")
@@ -309,7 +303,7 @@ phyloseq::psmelt(ps_family) %>%
   labs(x = "", y = "Abundance\n") +
   facet_wrap(~ OTU, scales = "free") +
   theme(legend.position = "bottom", axis.text.x = element_blank()) +
-  scale_color_manual(values = pal[c(11,4,6,1)])
+  scale_color_manual(values = pal.discrete[c(11,4,6,1)])
 
 ggsave("./output/figs/most_abundant_families_by_colonycolor.png",dpi=300,width = 10,height = 6)
 

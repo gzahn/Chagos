@@ -17,20 +17,16 @@ library(foreach)
 library(igraph) 
 source("./R/plot_bar2.R")
 
+# Custom color palettes
+source("./R/palettes.R")
+colorblindr::palette_plot(pal.discrete)
+colorblindr::palette_plot(pal.continuous)
+
 
 # Register Google Maps Key
 register_google(" ???hidden??? ")
 
-# Custom color palette
-pal = c("#c4a113","#c1593c","#643d91","#894e7d","#477887","#688e52",
-        "#12aa91","#705f36","#8997b2","#753c2b","#3c3e44","#b3bf2d",
-        "#82b2a4","#820616","#a17fc1","#262a8e","#abb5b5","#000000",
-        "#493829","#816C5B","#A9A18C","#613318","#855723","#B99C6B",
-        "#8F3B1B","#D57500","#DBCA69","#404F24","#668D3C","#BDD09F",
-        "#4E6172","#83929F","#A3ADB8")
 
-palplot <- colorblindr::palette_plot(pal)
-palplot
 # Load data ####
 ps <- readRDS("./output/cleaned_ps_object_w_tree.RDS")
 names(sample_data(ps))
@@ -74,7 +70,7 @@ saveRDS(ps_temp_ra,"./output/ps_temp_ra.RDS")
 
 plot_bar2(ps_island_ra, fill = "Phylum") + labs(x="Island",y="Relative abundance") +  # island
   theme_bw() + 
-  scale_fill_manual(values = pal) + 
+  scale_fill_manual(values = pal.discrete) + 
   theme(axis.text.x = element_text(angle=60,hjust=1),
         axis.title = element_text(face="bold",size=16),
         legend.title = element_text(face="bold",size=16))
@@ -84,7 +80,7 @@ plot_bar2(ps_color_ra, fill = "Phylum") + labs(x="Coral color",y="Relative abund
   theme_bw() + 
   theme(axis.title = element_text(face="bold",size=16),
         legend.title = element_text(face="bold",size=16)) +
-  scale_fill_manual(values = pal) + theme(axis.text.x = element_text(angle=60,hjust=1))
+  scale_fill_manual(values = pal.discrete) + theme(axis.text.x = element_text(angle=60,hjust=1))
 ggsave("./output/figs/Barplot_Phylum_relabund_by_Coral_Color.png",dpi=300)
 
 plot_bar2(ps_species_ra, fill = "Phylum") + labs(x="Coral species",y="Relative abundance") +  # species
@@ -92,7 +88,7 @@ plot_bar2(ps_species_ra, fill = "Phylum") + labs(x="Coral species",y="Relative a
   theme(axis.text.x = element_text(face = "italic"),
         axis.title = element_text(face="bold",size=16),
         legend.title = element_text(face="bold",size=16)) + 
-  scale_fill_manual(values = pal) 
+  scale_fill_manual(values = pal.discrete) 
 ggsave("./output/figs/Barplot_Phylum_relabund_by_Coral_Species.png",dpi=300)
 
 plot_bar2(ps_temp_ra, fill = "Phylum") + labs(x="Temperature group",y="Relative abundance") +  # temp
@@ -100,7 +96,7 @@ plot_bar2(ps_temp_ra, fill = "Phylum") + labs(x="Temperature group",y="Relative 
   theme(axis.text.x = element_text(face="bold",size=12),
         axis.title = element_text(face="bold",size=16),
         legend.title = element_text(face="bold",size=16)) +
-  scale_fill_manual(values = pal) 
+  scale_fill_manual(values = pal.discrete) 
 ggsave("./output/figs/Barplot_Phylum_relabund_by_Temp.png",dpi=300)
 
 
@@ -178,7 +174,7 @@ plot(meta$ColonyColor,meta$AvgSiteTemp)
 ggplot(meta, aes(x=ColonyColor,y=AvgSiteTemp,fill=ColonyColor)) + 
   geom_boxplot(alpha=.5) + geom_point(alpha=.5) +
   labs(y="Mean Site Temperature",x="Colony Color",fill="Colony Color") +
-  scale_fill_manual(values = pal[c(11,4,6,1)]) + theme_bw() +
+  scale_fill_manual(values = pal.discrete[c(11,4,6,1)]) + theme_bw() +
   theme(axis.text.x = element_text(face="bold",size=12),
         axis.title = element_text(face="bold",size=16),
         legend.title = element_text(face="bold",size=16))
@@ -200,7 +196,7 @@ nmds <- ordinate(ps_ra,method = "NMDS")
 ordu <-  ordinate(ps_ra, "PCoA", "unifrac", weighted=TRUE)
 
 # Plot ordinations
-plot_ordination(ps_ra,dca,color = "ColonyColor") + scale_color_manual(values = pal[c(11,4,6,1)])
+plot_ordination(ps_ra,dca,color = "ColonyColor") + scale_color_manual(values = pal.discrete[c(11,4,6,1)])
 ggsave("./output/figs/DCA_Ordination_by_ColonyColor.png",dpi=300)
 
 plot_ordination(ps_ra,dca,color = "Island")
@@ -236,7 +232,7 @@ ggsave("./output/figs/Heatmap_ColonyColor.png",dpi=300)
 
 # Phylogenetic tree plots ####
 plot_tree(ps_ra,color="ColonyColor",ladderize = "left") +
-  scale_color_manual(values = pal[c(11,4,6,1)]) + 
+  scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
   theme(legend.position = "bottom")
 ggsave("./output/figs/GTR_Phylogenetic_Tree_Colored_by_ColonyColor.png",dpi=300,height = 8,width = 6)
 
@@ -248,26 +244,26 @@ ig <- make_network(ps_ra, max.dist = .6)
 # by Coral Species
 set.seed(123)
 plot_network(ig, physeq = ps_ra, color = "SpeciesConfirmed",label = NULL) + 
-  scale_color_manual(values = pal[c(1,5)]) + labs(color = "Coral Species")
+  scale_color_manual(values = pal.discrete[c(1,5)]) + labs(color = "Coral Species")
 ggsave("./output/figs/Network_Plot_Species.png",dpi=300)
 
 # by Temperature
 set.seed(123)
 plot_network(ig, physeq = ps_ra, color = "AvgSiteTemp",label = NULL) +
-  scale_color_gradient(low=pal[16],high = pal[4]) +
+  scale_color_gradient(low=pal.discrete[16],high = pal.discrete[4]) +
   labs(color="Mean Site\nTemperature")
 ggsave("./output/figs/Network_Plot_Temperature.png",dpi=300)
 
 # by ColonyColor
 set.seed(123)
 plot_network(ig, physeq = ps_ra, color = "ColonyColor",label = NULL) +
-  scale_color_manual(values = pal[c(11,4,6,1)]) + labs(color="Colony color")
+  scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + labs(color="Colony color")
 ggsave("./output/figs/Network_Plot_ColonyColor.png",dpi=300)
 
 # by Island
 set.seed(123)
 plot_network(ig, physeq = ps_ra, color = "Island",label = NULL) +
-  scale_color_manual(values = pal)
+  scale_color_manual(values = pal.discrete)
 ggsave("./output/figs/Network_Plot_Island.png",dpi=300)
 
 # by Depth_m
