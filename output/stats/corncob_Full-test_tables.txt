@@ -1,0 +1,189 @@
+                                                                                    OTU8 
+"Bacteria_Proteobacteria_Gammaproteobacteria_Oceanospirillales_Halomonadaceae_Halomonas" 
+
+Call:
+bbdml(formula = OTU8 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
+    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+
+Coefficients associated with abundance:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              -3.5649     0.3031 -11.761   <2e-16 ***
+AvgSiteTempGroup30.5-31   0.2664     0.4124   0.646    0.520    
+AvgSiteTempGroup>31      -0.8047     0.5226  -1.540    0.127    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              -2.7696     0.4055  -6.830 8.64e-10 ***
+AvgSiteTempGroup30.5-31   0.7403     0.5262   1.407    0.163    
+AvgSiteTempGroup>31       0.2068     0.6446   0.321    0.749    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -508.5
+                                                                    OTU11 
+"Bacteria_Firmicutes_Bacilli_Bacillales_Staphylococcaceae_Staphylococcus" 
+
+Call:
+bbdml(formula = OTU11 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
+    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+
+Coefficients associated with abundance:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              -5.8089     0.4213 -13.788  < 2e-16 ***
+AvgSiteTempGroup30.5-31   2.0928     0.5664   3.695 0.000371 ***
+AvgSiteTempGroup>31       0.4912     0.5245   0.936 0.351455    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              -4.3738     0.5333  -8.202 1.28e-12 ***
+AvgSiteTempGroup30.5-31   2.5946     0.6795   3.818 0.000242 ***
+AvgSiteTempGroup>31       0.1734     0.6765   0.256 0.798314    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -378.54
+                                                                 OTU14 
+"Bacteria_Proteobacteria_Gammaproteobacteria_Vibrionales_Vibrionaceae" 
+
+Call:
+bbdml(formula = OTU14 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
+    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+
+Coefficients associated with abundance:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              -3.7612     0.6223  -6.044 3.08e-08 ***
+AvgSiteTempGroup30.5-31  -1.0012     0.7314  -1.369    0.174    
+AvgSiteTempGroup>31       0.4764     0.7350   0.648    0.518    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                        Estimate Std. Error t value Pr(>|t|)  
+(Intercept)              -1.3152     0.6811  -1.931   0.0565 .
+AvgSiteTempGroup30.5-31  -1.5637     0.8194  -1.908   0.0594 .
+AvgSiteTempGroup>31      -0.2492     0.8142  -0.306   0.7602  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -415.07
+                                                                                    OTU15 
+"Bacteria_Proteobacteria_Gammaproteobacteria_Pseudomonadales_Moraxellaceae_Psychrobacter" 
+
+Call:
+bbdml(formula = OTU15 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
+    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+
+Coefficients associated with abundance:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              -3.5025     0.3490 -10.035  < 2e-16 ***
+AvgSiteTempGroup30.5-31  -0.8184     0.3996  -2.048  0.04336 *  
+AvgSiteTempGroup>31      -1.4962     0.4530  -3.303  0.00136 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              -2.4000     0.4345  -5.524    3e-07 ***
+AvgSiteTempGroup30.5-31  -1.4515     0.5213  -2.784  0.00650 ** 
+AvgSiteTempGroup>31      -1.6317     0.5879  -2.775  0.00667 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -487.28
+                                                                                                 OTU24 
+"Bacteria_Epsilonbacteraeota_Campylobacteria_Campylobacterales_Arcobacteraceae_Arcobacter_bivalviorum" 
+
+Call:
+bbdml(formula = OTU24 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
+    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+
+Coefficients associated with abundance:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              -4.6624     0.6212  -7.505 3.61e-11 ***
+AvgSiteTempGroup30.5-31  -0.4251     0.7361  -0.578    0.565    
+AvgSiteTempGroup>31       0.2726     0.7679   0.355    0.723    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                        Estimate Std. Error t value Pr(>|t|)   
+(Intercept)             -2.36312    0.70413  -3.356  0.00115 **
+AvgSiteTempGroup30.5-31 -0.79611    0.84606  -0.941  0.34916   
+AvgSiteTempGroup>31     -0.09303    0.87844  -0.106  0.91589   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -353.43
+                                                                                    OTU28 
+"Bacteria_Proteobacteria_Gammaproteobacteria_Pseudomonadales_Moraxellaceae_Psychrobacter" 
+
+Call:
+bbdml(formula = OTU28 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
+    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+
+Coefficients associated with abundance:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              -4.9632     0.8083  -6.141 2.01e-08 ***
+AvgSiteTempGroup30.5-31   0.2132     0.9451   0.226    0.822    
+AvgSiteTempGroup>31      -0.8754     1.1957  -0.732    0.466    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                        Estimate Std. Error t value Pr(>|t|)  
+(Intercept)              -2.1045     0.8944  -2.353   0.0207 *
+AvgSiteTempGroup30.5-31  -0.2350     1.0530  -0.223   0.8239  
+AvgSiteTempGroup>31      -0.4522     1.3278  -0.341   0.7342  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -247.1
+                                                                                 OTU36 
+"Bacteria_Bacteroidetes_Bacteroidia_Flavobacteriales_Flavobacteriaceae_Flavobacterium" 
+
+Call:
+bbdml(formula = OTU36 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
+    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+
+Coefficients associated with abundance:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)              -5.8213     0.5881  -9.898 3.36e-16 ***
+AvgSiteTempGroup30.5-31   1.0166     0.7530   1.350    0.180    
+AvgSiteTempGroup>31      -0.1978     0.8298  -0.238    0.812    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Coefficients associated with dispersion:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)             -3.69200    0.68987  -5.352 6.24e-07 ***
+AvgSiteTempGroup30.5-31  1.20344    0.87388   1.377    0.172    
+AvgSiteTempGroup>31      0.08384    0.97419   0.086    0.932    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Log-likelihood: -276.3

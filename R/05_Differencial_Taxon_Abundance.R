@@ -329,6 +329,69 @@ plot(Full_da_analysis) + theme(axis.title.y = element_text(size=12,face="bold"))
   labs(caption = "Joint test for differential abundance and variability across Colony Color,\n
        controlling for the effect of Coral Species on abundance")
 ggsave("./output/figs/Full_da_test.png",width = 16,height = 8,dpi=300)
+
+sigs_full <- otu_to_taxonomy(OTU = Full_da_analysis$significant_taxa, data = ps)
+
+# Extract sequences from taxa with significant differential abundance
+sigs_full_seqs <- which(taxa_names(ps) %in% names(sigs_full))
+x <- ps@refseq[sigs_full_seqs]
+names(x) <- paste0(names(x),"_", otu_to_taxonomy(names(x),ps))
+writeXStringSet(x, "./output/Full_Significant_Taxa_Seqs.fasta", append=FALSE, compress=FALSE, compression_level=NA, format="fasta")
+
+full_diff_otus <- unlist(purrr::map(str_split(names(x),"_"),1))
+full_diff_otus <- noquote(full_diff_otus)
+
+
+# Individual taxa tests for FULL differential Test ####
+
+set.seed(123)
+corncob_da14 <- bbdml(formula = OTU8 ~ AvgSiteTempGroup,
+                      phi.formula = ~ AvgSiteTempGroup,
+                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+set.seed(123)
+corncob_da15 <- bbdml(formula = OTU11 ~ AvgSiteTempGroup,
+                      phi.formula = ~ AvgSiteTempGroup,
+                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+set.seed(123)
+corncob_da16 <- bbdml(formula = OTU14 ~ AvgSiteTempGroup,
+                      phi.formula = ~ AvgSiteTempGroup,
+                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+set.seed(123)
+corncob_da17 <- bbdml(formula = OTU15 ~ AvgSiteTempGroup,
+                      phi.formula = ~ AvgSiteTempGroup,
+                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+set.seed(123)
+corncob_da18 <- bbdml(formula = OTU24 ~ AvgSiteTempGroup,
+                      phi.formula = ~ AvgSiteTempGroup,
+                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+set.seed(123)
+corncob_da19 <- bbdml(formula = OTU28 ~ AvgSiteTempGroup,
+                      phi.formula = ~ AvgSiteTempGroup,
+                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+set.seed(123)
+corncob_da20 <- bbdml(formula = OTU36 ~ AvgSiteTempGroup,
+                      phi.formula = ~ AvgSiteTempGroup,
+                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+
+# Write stats tables to file
+sink("./output/stats/corncob_Full-test_tables.txt")
+print(sigs_full[1])
+corncob_da14
+print(sigs_full[2])
+corncob_da15
+print(sigs_full[3])
+corncob_da16
+print(sigs_full[4])
+corncob_da17
+print(sigs_full[5])
+corncob_da18
+print(sigs_full[6])
+corncob_da19
+print(sigs_full[7])
+corncob_da20
+sink(NULL)
+
+
 # Relative abundance plots ####
 
 # Top 12 taxa with highest relative abundance
