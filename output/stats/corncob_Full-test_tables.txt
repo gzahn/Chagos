@@ -2,188 +2,209 @@
 "Bacteria_Proteobacteria_Gammaproteobacteria_Oceanospirillales_Halomonadaceae_Halomonas" 
 
 Call:
-bbdml(formula = OTU8 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
-    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+bbdml(formula = OTU8 ~ ColonyColor + CoralSpecies, phi.formula = ~ColonyColor, 
+    data = ps, ... = pairlist(formula_null = ~CoralSpecies, phi.formula_null = ~1))
 
 
 Coefficients associated with abundance:
-                        Estimate Std. Error t value Pr(>|t|)    
-(Intercept)              -3.5649     0.3031 -11.761   <2e-16 ***
-AvgSiteTempGroup30.5-31   0.2664     0.4124   0.646    0.520    
-AvgSiteTempGroup>31      -0.8047     0.5226  -1.540    0.127    
+                          Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                -3.9636     0.2189 -18.105  < 2e-16 ***
+ColonyColorPale            -0.5831     1.1060  -0.527  0.59918    
+ColonyColorVery pale        0.4073     0.3206   1.270  0.20685    
+ColonyColorBleached         0.3202     0.6115   0.524  0.60162    
+CoralSpeciesP. damicornis   0.7459     0.2333   3.197  0.00184 ** 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
 Coefficients associated with dispersion:
-                        Estimate Std. Error t value Pr(>|t|)    
-(Intercept)              -2.7696     0.4055  -6.830 8.64e-10 ***
-AvgSiteTempGroup30.5-31   0.7403     0.5262   1.407    0.163    
-AvgSiteTempGroup>31       0.2068     0.6446   0.321    0.749    
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -2.5952     0.2543 -10.204   <2e-16 ***
+ColonyColorPale        0.5521     1.2616   0.438   0.6626    
+ColonyColorVery pale  -1.4913     0.5856  -2.547   0.0124 *  
+ColonyColorBleached    1.2059     0.6883   1.752   0.0827 .  
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
-Log-likelihood: -508.5
+Log-likelihood: -552.28
                                                                     OTU11 
 "Bacteria_Firmicutes_Bacilli_Bacillales_Staphylococcaceae_Staphylococcus" 
 
 Call:
-bbdml(formula = OTU11 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
-    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+bbdml(formula = OTU11 ~ ColonyColor + CoralSpecies, phi.formula = ~ColonyColor, 
+    data = ps, ... = pairlist(formula_null = ~CoralSpecies, phi.formula_null = ~1))
 
 
 Coefficients associated with abundance:
-                        Estimate Std. Error t value Pr(>|t|)    
-(Intercept)              -5.8089     0.4213 -13.788  < 2e-16 ***
-AvgSiteTempGroup30.5-31   2.0928     0.5664   3.695 0.000371 ***
-AvgSiteTempGroup>31       0.4912     0.5245   0.936 0.351455    
+                          Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                -4.4547     0.3197 -13.935  < 2e-16 ***
+ColonyColorPale            -1.6497     0.4022  -4.101 8.22e-05 ***
+ColonyColorVery pale        0.2345     0.7132   0.329    0.743    
+ColonyColorBleached        -0.2169     0.5917  -0.367    0.715    
+CoralSpeciesP. damicornis   0.3383     0.2699   1.254    0.213    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
 Coefficients associated with dispersion:
-                        Estimate Std. Error t value Pr(>|t|)    
-(Intercept)              -4.3738     0.5333  -8.202 1.28e-12 ***
-AvgSiteTempGroup30.5-31   2.5946     0.6795   3.818 0.000242 ***
-AvgSiteTempGroup>31       0.1734     0.6765   0.256 0.798314    
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -2.3070     0.3482  -6.625 1.61e-09 ***
+ColonyColorPale       -4.5684     0.8275  -5.520 2.54e-07 ***
+ColonyColorVery pale  -0.6110     0.8647  -0.707    0.481    
+ColonyColorBleached   -0.6595     0.6922  -0.953    0.343    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
-Log-likelihood: -378.54
+Log-likelihood: -409.19
                                                                  OTU14 
 "Bacteria_Proteobacteria_Gammaproteobacteria_Vibrionales_Vibrionaceae" 
 
 Call:
-bbdml(formula = OTU14 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
-    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+bbdml(formula = OTU14 ~ ColonyColor + CoralSpecies, phi.formula = ~ColonyColor, 
+    data = ps, ... = pairlist(formula_null = ~CoralSpecies, phi.formula_null = ~1))
 
 
 Coefficients associated with abundance:
-                        Estimate Std. Error t value Pr(>|t|)    
-(Intercept)              -3.7612     0.6223  -6.044 3.08e-08 ***
-AvgSiteTempGroup30.5-31  -1.0012     0.7314  -1.369    0.174    
-AvgSiteTempGroup>31       0.4764     0.7350   0.648    0.518    
+                          Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                -4.5502     0.3495 -13.020   <2e-16 ***
+ColonyColorPale             1.1594     0.6823   1.699   0.0923 .  
+ColonyColorVery pale        1.7151     0.5792   2.961   0.0038 ** 
+ColonyColorBleached         0.9095     0.6788   1.340   0.1832    
+CoralSpeciesP. damicornis   0.3109     0.3080   1.009   0.3152    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
 Coefficients associated with dispersion:
-                        Estimate Std. Error t value Pr(>|t|)  
-(Intercept)              -1.3152     0.6811  -1.931   0.0565 .
-AvgSiteTempGroup30.5-31  -1.5637     0.8194  -1.908   0.0594 .
-AvgSiteTempGroup>31      -0.2492     0.8142  -0.306   0.7602  
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          -2.22703    0.38254  -5.822 6.66e-08 ***
+ColonyColorPale      -0.05531    0.83351  -0.066    0.947    
+ColonyColorVery pale  0.02475    0.73792   0.034    0.973    
+ColonyColorBleached   0.74187    0.75816   0.979    0.330    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
-Log-likelihood: -415.07
+Log-likelihood: -450.46
                                                                                     OTU15 
 "Bacteria_Proteobacteria_Gammaproteobacteria_Pseudomonadales_Moraxellaceae_Psychrobacter" 
 
 Call:
-bbdml(formula = OTU15 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
-    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+bbdml(formula = OTU15 ~ ColonyColor + CoralSpecies, phi.formula = ~ColonyColor, 
+    data = ps, ... = pairlist(formula_null = ~CoralSpecies, phi.formula_null = ~1))
 
 
 Coefficients associated with abundance:
-                        Estimate Std. Error t value Pr(>|t|)    
-(Intercept)              -3.5025     0.3490 -10.035  < 2e-16 ***
-AvgSiteTempGroup30.5-31  -0.8184     0.3996  -2.048  0.04336 *  
-AvgSiteTempGroup>31      -1.4962     0.4530  -3.303  0.00136 ** 
+                          Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                -3.9935     0.1803 -22.145  < 2e-16 ***
+ColonyColorPale            -1.1192     0.4921  -2.274 0.025015 *  
+ColonyColorVery pale       -0.5063     0.2442  -2.074 0.040621 *  
+ColonyColorBleached        -0.7014     0.4828  -1.453 0.149330    
+CoralSpeciesP. damicornis   0.7932     0.2019   3.929 0.000155 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
 Coefficients associated with dispersion:
-                        Estimate Std. Error t value Pr(>|t|)    
-(Intercept)              -2.4000     0.4345  -5.524    3e-07 ***
-AvgSiteTempGroup30.5-31  -1.4515     0.5213  -2.784  0.00650 ** 
-AvgSiteTempGroup>31      -1.6317     0.5879  -2.775  0.00667 ** 
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          -3.06112    0.22152 -13.819  < 2e-16 ***
+ColonyColorPale      -1.39709    0.70177  -1.991   0.0491 *  
+ColonyColorVery pale -2.58105    0.61201  -4.217 5.33e-05 ***
+ColonyColorBleached  -0.02858    0.60450  -0.047   0.9624    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
-Log-likelihood: -487.28
+Log-likelihood: -574.95
                                                                                                  OTU24 
 "Bacteria_Epsilonbacteraeota_Campylobacteria_Campylobacterales_Arcobacteraceae_Arcobacter_bivalviorum" 
 
 Call:
-bbdml(formula = OTU24 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
-    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+bbdml(formula = OTU24 ~ ColonyColor + CoralSpecies, phi.formula = ~ColonyColor, 
+    data = ps, ... = pairlist(formula_null = ~CoralSpecies, phi.formula_null = ~1))
 
 
 Coefficients associated with abundance:
-                        Estimate Std. Error t value Pr(>|t|)    
-(Intercept)              -4.6624     0.6212  -7.505 3.61e-11 ***
-AvgSiteTempGroup30.5-31  -0.4251     0.7361  -0.578    0.565    
-AvgSiteTempGroup>31       0.2726     0.7679   0.355    0.723    
+                          Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                -5.6628     0.4104 -13.797  < 2e-16 ***
+ColonyColorPale             1.4290     0.7533   1.897  0.06062 .  
+ColonyColorVery pale        1.7402     0.6160   2.825  0.00568 ** 
+ColonyColorBleached         0.6981     0.7232   0.965  0.33664    
+CoralSpeciesP. damicornis   0.9628     0.3165   3.042  0.00298 ** 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
 Coefficients associated with dispersion:
-                        Estimate Std. Error t value Pr(>|t|)   
-(Intercept)             -2.36312    0.70413  -3.356  0.00115 **
-AvgSiteTempGroup30.5-31 -0.79611    0.84606  -0.941  0.34916   
-AvgSiteTempGroup>31     -0.09303    0.87844  -0.106  0.91589   
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          -2.86844    0.44378  -6.464 3.46e-09 ***
+ColonyColorPale       0.05471    0.94234   0.058    0.954    
+ColonyColorVery pale -0.14759    0.79025  -0.187    0.852    
+ColonyColorBleached   0.16761    0.83710   0.200    0.842    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
-Log-likelihood: -353.43
+Log-likelihood: -350.36
                                                                                     OTU28 
 "Bacteria_Proteobacteria_Gammaproteobacteria_Pseudomonadales_Moraxellaceae_Psychrobacter" 
 
 Call:
-bbdml(formula = OTU28 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
-    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+bbdml(formula = OTU28 ~ ColonyColor + CoralSpecies, phi.formula = ~ColonyColor, 
+    data = ps, ... = pairlist(formula_null = ~CoralSpecies, phi.formula_null = ~1))
 
 
 Coefficients associated with abundance:
-                        Estimate Std. Error t value Pr(>|t|)    
-(Intercept)              -4.9632     0.8083  -6.141 2.01e-08 ***
-AvgSiteTempGroup30.5-31   0.2132     0.9451   0.226    0.822    
-AvgSiteTempGroup>31      -0.8754     1.1957  -0.732    0.466    
+                          Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                -5.9392     0.5252 -11.308  < 2e-16 ***
+ColonyColorPale            -1.9773     1.0151  -1.948   0.0541 .  
+ColonyColorVery pale        0.0125     0.7063   0.018   0.9859    
+ColonyColorBleached         0.4262     1.1852   0.360   0.7199    
+CoralSpeciesP. damicornis   1.7884     0.3821   4.681 8.73e-06 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
 Coefficients associated with dispersion:
-                        Estimate Std. Error t value Pr(>|t|)  
-(Intercept)              -2.1045     0.8944  -2.353   0.0207 *
-AvgSiteTempGroup30.5-31  -0.2350     1.0530  -0.223   0.8239  
-AvgSiteTempGroup>31      -0.4522     1.3278  -0.341   0.7342  
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -2.2604     0.5331  -4.240 4.89e-05 ***
+ColonyColorPale       -3.3325     1.4166  -2.352   0.0205 *  
+ColonyColorVery pale  -2.0860     0.8975  -2.324   0.0221 *  
+ColonyColorBleached    0.5845     1.3031   0.449   0.6547    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
-Log-likelihood: -247.1
+Log-likelihood: -236.01
                                                                                  OTU36 
 "Bacteria_Bacteroidetes_Bacteroidia_Flavobacteriales_Flavobacteriaceae_Flavobacterium" 
 
 Call:
-bbdml(formula = OTU36 ~ AvgSiteTempGroup, phi.formula = ~AvgSiteTempGroup, 
-    data = subset_samples(ps, AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+bbdml(formula = OTU36 ~ ColonyColor + CoralSpecies, phi.formula = ~ColonyColor, 
+    data = ps, ... = pairlist(formula_null = ~CoralSpecies, phi.formula_null = ~1))
 
 
 Coefficients associated with abundance:
-                        Estimate Std. Error t value Pr(>|t|)    
-(Intercept)              -5.8213     0.5881  -9.898 3.36e-16 ***
-AvgSiteTempGroup30.5-31   1.0166     0.7530   1.350    0.180    
-AvgSiteTempGroup>31      -0.1978     0.8298  -0.238    0.812    
+                          Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                -6.0487     0.4240 -14.266  < 2e-16 ***
+ColonyColorPale             0.7271     0.8686   0.837    0.404    
+ColonyColorVery pale        0.6361     0.4756   1.337    0.184    
+ColonyColorBleached         0.4465     1.1545   0.387    0.700    
+CoralSpeciesP. damicornis   1.2870     0.3004   4.284 4.14e-05 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
 Coefficients associated with dispersion:
-                        Estimate Std. Error t value Pr(>|t|)    
-(Intercept)             -3.69200    0.68987  -5.352 6.24e-07 ***
-AvgSiteTempGroup30.5-31  1.20344    0.87388   1.377    0.172    
-AvgSiteTempGroup>31      0.08384    0.97419   0.086    0.932    
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           -3.0636     0.4583  -6.685 1.21e-09 ***
+ColonyColorPale       -0.3957     1.0722  -0.369  0.71286    
+ColonyColorVery pale  -2.4785     0.7783  -3.184  0.00192 ** 
+ColonyColorBleached    1.0595     1.2798   0.828  0.40966    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 
-Log-likelihood: -276.3
+Log-likelihood: -269.66

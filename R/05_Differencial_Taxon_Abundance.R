@@ -345,33 +345,47 @@ full_diff_otus <- noquote(full_diff_otus)
 # Individual taxa tests for FULL differential Test ####
 
 set.seed(123)
-corncob_da14 <- bbdml(formula = OTU8 ~ AvgSiteTempGroup,
-                      phi.formula = ~ AvgSiteTempGroup,
-                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+corncob_da14 <- bbdml(formula = OTU8 ~ ColonyColor + CoralSpecies,
+                      phi.formula = ~ ColonyColor,
+                      formula_null = ~ CoralSpecies, #mean
+                      phi.formula_null = ~ 1,
+                      data = ps)
 set.seed(123)
-corncob_da15 <- bbdml(formula = OTU11 ~ AvgSiteTempGroup,
-                      phi.formula = ~ AvgSiteTempGroup,
-                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+corncob_da15 <- bbdml(formula = OTU11 ~ ColonyColor + CoralSpecies,
+                      phi.formula = ~ ColonyColor,
+                      formula_null = ~ CoralSpecies, #mean
+                      phi.formula_null = ~ 1,
+                      data = ps)
 set.seed(123)
-corncob_da16 <- bbdml(formula = OTU14 ~ AvgSiteTempGroup,
-                      phi.formula = ~ AvgSiteTempGroup,
-                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+corncob_da16 <- bbdml(formula = OTU14 ~ ColonyColor + CoralSpecies,
+                      phi.formula = ~ ColonyColor,
+                      formula_null = ~ CoralSpecies, #mean
+                      phi.formula_null = ~ 1,
+                      data = ps)
 set.seed(123)
-corncob_da17 <- bbdml(formula = OTU15 ~ AvgSiteTempGroup,
-                      phi.formula = ~ AvgSiteTempGroup,
-                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+corncob_da17 <- bbdml(formula = OTU15 ~ ColonyColor + CoralSpecies,
+                      phi.formula = ~ ColonyColor,
+                      formula_null = ~ CoralSpecies, #mean
+                      phi.formula_null = ~ 1,
+                      data = ps)
 set.seed(123)
-corncob_da18 <- bbdml(formula = OTU24 ~ AvgSiteTempGroup,
-                      phi.formula = ~ AvgSiteTempGroup,
-                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+corncob_da18 <- bbdml(formula = OTU24 ~ ColonyColor + CoralSpecies,
+                      phi.formula = ~ ColonyColor,
+                      formula_null = ~ CoralSpecies, #mean
+                      phi.formula_null = ~ 1,
+                      data = ps)
 set.seed(123)
-corncob_da19 <- bbdml(formula = OTU28 ~ AvgSiteTempGroup,
-                      phi.formula = ~ AvgSiteTempGroup,
-                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+corncob_da19 <- bbdml(formula = OTU28 ~ ColonyColor + CoralSpecies,
+                      phi.formula = ~ ColonyColor,
+                      formula_null = ~ CoralSpecies, #mean
+                      phi.formula_null = ~ 1,
+                      data = ps)
 set.seed(123)
-corncob_da20 <- bbdml(formula = OTU36 ~ AvgSiteTempGroup,
-                      phi.formula = ~ AvgSiteTempGroup,
-                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+corncob_da20 <- bbdml(formula = OTU36 ~ ColonyColor + CoralSpecies,
+                      phi.formula = ~ ColonyColor,
+                      formula_null = ~ CoralSpecies, #mean
+                      phi.formula_null = ~ 1,
+                      data = ps)
 
 # Write stats tables to file
 sink("./output/stats/corncob_Full-test_tables.txt")
