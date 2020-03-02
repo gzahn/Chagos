@@ -15,6 +15,7 @@ library(fantaxtic)
 library(dada2)
 library(Biostrings)
 source("./R/plot_bar2.R")
+source("./R/plot_bbdml2.R")
 
 # Custom color palettes
 source("./R/palettes.R")
@@ -35,9 +36,11 @@ if(identical(seqs,rownames(tax_table(ps)))){
 # clean taxa names
 ps <- clean_taxa_names(ps)
 
+
 # Differential Abundance Based on Colony Color ####
 
-# Find differentially-abundant groups ##
+
+# Find differentially-abundant taxa ##
 set.seed(123)
 da_analysis <- differentialTest(formula = ~ ColonyColor, #abundance
                                 phi.formula = ~ 1, #dispersion
@@ -75,7 +78,7 @@ corncob_da1 <- bbdml(formula = OTU8 ~ ColonyColor,
                      phi.formula = ~ ColonyColor,
                      data = ps)
 
-p1 <- plot(corncob_da1,color="ColonyColor") + ggtitle(sigs_colcolor[1]) + 
+p1 <- plot.bbdml2(corncob_da1,color="ColonyColor") + ggtitle(sigs_colcolor[1]) + 
   scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
   theme(axis.text.x = element_blank())
 
@@ -84,7 +87,7 @@ corncob_da2 <- bbdml(formula = OTU14 ~ ColonyColor,
                      phi.formula = ~ ColonyColor,
                      data = ps)
 
-p2 <- plot(corncob_da2,color="ColonyColor") + ggtitle(sigs_colcolor[2]) + 
+p2 <- plot.bbdml2(corncob_da2,color="ColonyColor") + ggtitle(sigs_colcolor[2]) + 
   scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
   theme(axis.text.x = element_blank()) 
 
@@ -93,7 +96,7 @@ corncob_da3 <- bbdml(formula = OTU24 ~ ColonyColor,
                      phi.formula = ~ ColonyColor,
                      data = ps)
 
-p3 <- plot(corncob_da3,color="ColonyColor") + ggtitle(sigs_colcolor[3]) + 
+p3 <- plot.bbdml2(corncob_da3,color="ColonyColor") + ggtitle(sigs_colcolor[3]) + 
   scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
   theme(axis.text.x = element_blank())
 
@@ -102,7 +105,7 @@ corncob_da4 <- bbdml(formula = OTU36 ~ ColonyColor,
                      phi.formula = ~ ColonyColor,
                      data = ps)
 
-p4 <- plot(corncob_da4,color="ColonyColor") + ggtitle(sigs_colcolor[4]) + 
+p4 <- plot.bbdml2(corncob_da4,color="ColonyColor") + ggtitle(sigs_colcolor[4]) + 
   scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
   theme(axis.text.x = element_blank())
 
@@ -111,7 +114,7 @@ corncob_da5 <- bbdml(formula = OTU110 ~ ColonyColor,
                      phi.formula = ~ ColonyColor,
                      data = ps)
 
-p5 <- plot(corncob_da5,color="ColonyColor") + ggtitle(sigs_colcolor[5]) + 
+p5 <- plot.bbdml2(corncob_da5,color="ColonyColor") + ggtitle(sigs_colcolor[5]) + 
   scale_color_manual(values = pal.discrete[c(11,4,6,1)]) + 
   theme(axis.text.x = element_blank())
 
@@ -149,26 +152,34 @@ writeXStringSet(x, "./output/TempGroup_Significant_Taxa_Seqs2.fasta", append=FAL
 temp_diff_otus <- unlist(purrr::map(str_split(names(x),"_"),1))
 temp_diff_otus <- noquote(temp_diff_otus)
 
-
+# Change TempGroup Factor levels plot.bbdml doesn't like factors with numbers in names!
+ps@sam_data$AvgSiteTempGroup <- as.character(ps@sam_data$AvgSiteTempGroup)
+ps@sam_data$AvgSiteTempGroup[ps@sam_data$AvgSiteTempGroup == "<30.5"] <- "A_<30.5"
+ps@sam_data$AvgSiteTempGroup[ps@sam_data$AvgSiteTempGroup == "30.5-31"] <- "B_30.5-31"
+ps@sam_data$AvgSiteTempGroup[ps@sam_data$AvgSiteTempGroup == ">31"] <- "C_>31"
+ps@sam_data$AvgSiteTempGroup <- factor(ps@sam_data$AvgSiteTempGroup,
+                                       levels = c("A_<30.5","B_30.5-31","C_>31"))
 
 # Corncob plots of differential abundance
+
 set.seed(123)
 corncob_da7 <- bbdml(formula = OTU11 ~ AvgSiteTempGroup,
                      phi.formula = ~ AvgSiteTempGroup,
-                     data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
+                     data = subset_samples(ps,!is.na(ps@sam_data$AvgSiteTempGroup)))
 
-p7 <- plot(corncob_da7,color = "AvgSiteTempGroup") + ggtitle(sigs_tempgroup[1]) + 
+p7 <- plot.bbdml2(corncob_da7,color = "AvgSiteTempGroup") + ggtitle(sigs_tempgroup[1]) + 
   scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
         legend.position = "none")
+
 
 set.seed(123)
 corncob_da8 <- bbdml(formula = OTU12 ~ AvgSiteTempGroup,
                      phi.formula = ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
-p8 <- plot(corncob_da8,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[2]) + 
+p8 <- plot.bbdml2(corncob_da8,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[2]) + 
   scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
@@ -179,7 +190,7 @@ corncob_da9 <- bbdml(formula = OTU18 ~ AvgSiteTempGroup,
                      phi.formula = ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
-p9 <- plot(corncob_da9,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[3]) + 
+p9 <- plot.bbdml2(corncob_da9,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[3]) + 
   scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
@@ -190,10 +201,13 @@ corncob_da10 <- bbdml(formula = OTU19 ~ AvgSiteTempGroup,
                      phi.formula = ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
-p10 <- plot(corncob_da10,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[4]) + 
-  scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
+p10 <- plot.bbdml2(corncob_da10,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[4]) + 
+  scale_color_manual(values = pal.discrete[c(11,3,6)],
+                     labels = c("<30.5","30.5 - 31",">31")) + 
   theme(axis.text.x = element_blank(),
-        axis.title = element_text(face="bold",size=16))
+        axis.title = element_text(face="bold",size=16)) +
+  # scale_color_manual(labels=c("<30.5","30.5 - 31",">31")) + 
+  labs(color="Mean Site\nTemp. Group")
 
 
 set.seed(123)
@@ -201,7 +215,7 @@ corncob_da11 <- bbdml(formula = OTU21 ~ AvgSiteTempGroup,
                      phi.formula = ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
-p11 <- plot(corncob_da11,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[5]) + 
+p11 <- plot.bbdml2(corncob_da11,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[5]) + 
   scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
@@ -212,7 +226,7 @@ corncob_da12 <- bbdml(formula = OTU27 ~ AvgSiteTempGroup,
                      phi.formula = ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
-p12 <- plot(corncob_da12,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[6]) + 
+p12 <- plot.bbdml2(corncob_da12,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[6]) + 
   scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
@@ -223,7 +237,8 @@ corncob_da13 <- bbdml(formula = OTU28 ~ AvgSiteTempGroup,
                      phi.formula = ~ AvgSiteTempGroup,
                      data = subset_samples(ps,AvgSiteTempGroup %in% levels(ps@sam_data$AvgSiteTempGroup)))
 
-p13 <- plot(corncob_da13,color="AvgSiteTempGroup") + ggtitle(sigs_tempgroup[7]) + 
+
+p13 <- plot.bbdml2(corncob_da13,color="AvgSiteTempGroup",size=4) + ggtitle(sigs_tempgroup[7]) + 
   scale_color_manual(values = pal.discrete[c(11,3,6)]) + 
   theme(axis.text.x = element_blank(),
         axis.title.y = element_blank(),
@@ -287,7 +302,10 @@ Pacuta_da_analysis <- differentialTest(formula = ~ ColonyColor, #abundance
                                 data = Pacuta,
                                 fdr_cutoff = 0.05)
 
-pacuplot <- plot(Pacuta_da_analysis) + theme(axis.title.y = element_text(size=12,face="bold"))
+pacuplot <- plot(Pacuta_da_analysis) + 
+  theme(axis.title.y = element_text(size=12,face="bold"),
+        title = element_text(size=14,face="bold.italic")) + 
+  labs(title = "P. acuta")
 pacuplot
 ggsave("./output/figs/Pacuta_differential_abundance_by_ColonyColor_plot.png",width = 16,height = 6)
 
@@ -301,7 +319,10 @@ Pdamicornis_da_analysis <- differentialTest(formula = ~ ColonyColor, #abundance
                                        data = Pdamicornis,
                                        fdr_cutoff = 0.05)
 
-pdamiplot <- plot(Pdamicornis_da_analysis) + theme(axis.title.y = element_text(size=12,face="bold"))
+pdamiplot <- plot(Pdamicornis_da_analysis) + 
+  theme(axis.title.y = element_text(size=12,face="bold"),
+        title = element_text(size=14,face="bold.italic")) + 
+  labs(title = "P. damicornis")
 pdamiplot
 ggsave("./output/figs/Pdamicornis_differential_abundance_by_ColonyColor_plot.png",width = 16,height = 6)
 
@@ -429,6 +450,5 @@ phyloseq::psmelt(ps_family) %>%
   scale_color_manual(values = pal.discrete[c(11,4,6,1)])
 
 ggsave("./output/figs/most_abundant_families_by_colonycolor.png",dpi=300,width = 10,height = 6)
-
 
 
