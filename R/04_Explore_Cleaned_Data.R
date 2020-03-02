@@ -82,7 +82,7 @@ plot_bar2(ps_color_ra, fill = "Phylum") + labs(x="Coral color",y="Relative abund
   theme_bw() + 
   theme(axis.title = element_text(face="bold",size=16),
         legend.title = element_text(face="bold",size=16)) +
-        axis.text.x = element_text(angle=60,hjust=1,face="bold")) +
+        axis.text.x = element_text(angle=60,hjust=1,face="bold") +
   scale_fill_manual(values = pal.discrete) + theme(axis.text.x = element_text(angle=60,hjust=1))
 ggsave("./output/figs/Barplot_Phylum_relabund_by_Coral_Color.png",dpi=300)
 
@@ -201,15 +201,28 @@ nmds <- ordinate(ps_ra,method = "NMDS")
 ordu <-  ordinate(ps_ra, "PCoA", "unifrac", weighted=TRUE)
 
 # Plot ordinations
-plot_ordination(ps_ra,dca,color = "ColonyColor") + scale_color_manual(values = pal.discrete[c(11,4,6,1)])
+plot_ordination(ps_ra,dca,color = "ColonyColor") + scale_color_manual(values = pal.discrete[c(11,4,6,1)]) +
   theme_bw()
 ggsave("./output/figs/DCA_Ordination_by_ColonyColor.png",dpi=300)
 
-plot_ordination(ps_ra,dca,color = "Island") + theme_bw() + scale_color_manual(values=pal)
+plot_ordination(ps_ra,dca,color = "Island") + theme_bw() + scale_color_manual(values=pal.discrete)
 ggsave("./output/figs/DCA_Ordination_by_Island.png",dpi=300)
 
-plot_ordination(ps_ra, ordu, color="ColonyColor") + theme_bw() + scale_color_manual(values = pal[c(11,4,6,1)])
+plot_ordination(ps_ra, ordu, color="ColonyColor") + theme_bw() + scale_color_manual(values = pal.discrete[c(11,4,6,1)])
 ggsave("./output/figs/PCoA_Ordination_by_ColonyColor.png",dpi=300)
+
+plot_ordination(ps_ra, ordu, color="SpeciesConfirmed") + theme_bw() + scale_color_manual(values = pal.discrete[c(1,3)],name="Coral species")+
+  theme(legend.text = element_text(face="italic"))
+ggsave("./output/figs/PCoA_Ordination_by_CoralSpecies.png",dpi=300)
+
+# permanova
+
+veganmodel <- vegan::adonis(data = ,formula = otu_table(ps_ra) ~ ps_ra@sam_data$ColonyColor * ps_ra@sam_data$SpeciesConfirmed)
+
+sink("./output/stats/permanova_results.txt")
+veganmodel
+sink(NULL)
+
 
 # Heatmaps ####
 names(sample_data(ps_ra))
