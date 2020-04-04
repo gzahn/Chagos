@@ -452,3 +452,65 @@ phyloseq::psmelt(ps_family) %>%
 ggsave("./output/figs/most_abundant_families_by_colonycolor.png",dpi=300,width = 10,height = 6)
 
 
+
+
+
+# Yes please to this - Would you also like one of these plots for 
+# each coral species,where it shows those differentially abundant 
+# taxa in each sample? 
+#   https://raw.githubusercontent.com/gzahn/Chagos/master/output/figs/TempGroup_diff_abund_taxa.png I'll go ahead and get started on that today, just in case. It will take a few days perhaps, given that I'm recording lectures from home etc. But hopefully that first figure (split by coral species) has the info you need for writing?
+  
+set.seed(123)
+Full_da_Pacuta <- differentialTest(formula = ~ ColonyColor, #abundance
+                                     phi.formula = ~ ColonyColor, #dispersion
+                                     formula_null = ~ ColonyColor, #mean
+                                     phi.formula_null = ~ 1,
+                                     test = "Wald", boot = FALSE,
+                                     data = Pacuta,
+                                     fdr_cutoff = 0.05)
+plot(Full_da_Pacuta)
+Full_da_Pacuta$significant_taxa
+
+set.seed(123)
+Full_da_Pdamicornis <- differentialTest(formula = ~ ColonyColor, #abundance
+                                   phi.formula = ~ ColonyColor, #dispersion
+                                   formula_null = ~ ColonyColor, #mean
+                                   phi.formula_null = ~ 1,
+                                   test = "Wald", boot = FALSE,
+                                   data = Pacuta,
+                                   fdr_cutoff = 0.05)
+plot(Full_da_Pdamicornis)
+sigs_by_coralspecies <- otu_to_taxonomy(Full_da_Pdamicornis$significant_taxa,Pacuta)
+
+set.seed(123)
+corncob_da21 <- bbdml(formula = OTU15 ~ ColonyColor,
+                      phi.formula = ~ ColonyColor,
+                      formula_null = ~ ColonyColor, #mean
+                      phi.formula_null = ~ 1,
+                      data = Pacuta)
+
+p14 <- plot.bbdml2(corncob_da21,color="ColonyColor",size=4) + 
+  labs(title = "P. acuta",subtitle = sigs_by_coralspecies) + 
+  scale_color_manual(values = pal.discrete[c(11,3,6,1)]) + 
+  theme(axis.text.x = element_blank(),
+        axis.title.y = element_blank(),
+        title = element_text(face="italic"))
+
+
+set.seed(123)
+corncob_da22 <- bbdml(formula = OTU15 ~ ColonyColor,
+                      phi.formula = ~ ColonyColor,
+                      formula_null = ~ ColonyColor, #mean
+                      phi.formula_null = ~ 1,
+                      data = Pdamicornis)
+
+p15 <- plot.bbdml2(corncob_da22,color="ColonyColor",size=4) + 
+  labs(title = "P. damicornis",subtitle=sigs_by_coralspecies) + 
+  scale_color_manual(values = pal.discrete[c(11,3,6,1)]) + 
+  theme(axis.text.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position = "none",
+        title = element_text(face="italic"))
+
+p14 / p15
+ggsave("./output/figs/Differential_abundance_for_each_CoralSpecies_individually.png",dpi=300,width = 10,height = 6)

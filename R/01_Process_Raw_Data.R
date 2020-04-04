@@ -153,3 +153,33 @@ identical(ps, ps.noncontam)
 # save contam-free phyloseq object
 saveRDS(ps.noncontam, "./output/phyloseq_object_16S_noncontam.RDS")
 
+
+# Sequence stats:
+Fs <- readRDS("./output/dadaFs.RDS")
+Rs <- readRDS("./output/dadaRs.RDS")
+taxa <- readRDS("./output/taxa.RDS")
+seqtab.nochim = readRDS("./output/seqtab.nochim.RDS")
+dim(seqtab.nochim)
+
+x <- 1
+seqscounts <- c()
+for(i in names(Fs)){
+  t <- Fs[x]
+  r <- t[[1]]
+  seqscounts[x] <- sum(unlist(r[1]))
+  x=x+1
+}
+
+FwdReads <- sum(seqscounts)
+
+x <- 1
+seqscounts <- c()
+for(i in names(Rs)){
+  t <- Fs[x]
+  r <- t[[1]]
+  seqscounts[x] <- sum(unlist(r[1]))
+  x=x+1
+}
+
+RevReads <- sum(seqscounts)
+RevReads
