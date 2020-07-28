@@ -470,7 +470,7 @@ Full_da_Pacuta <- differentialTest(formula = ~ ColonyColor, #abundance
                                      fdr_cutoff = 0.05)
 plot(Full_da_Pacuta)
 Full_da_Pacuta$significant_taxa
-
+Pacuta@sam_data$AvgSiteTemp
 set.seed(123)
 Full_da_Pdamicornis <- differentialTest(formula = ~ ColonyColor, #abundance
                                    phi.formula = ~ ColonyColor, #dispersion
